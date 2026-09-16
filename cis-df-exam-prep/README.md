@@ -13,20 +13,29 @@ Exam night: Saturday. Available study time: ~3 h Thursday, Friday, Saturday dayt
 | `04-mock-exam-A.md` + `04-mock-exam-A-answer-key.md` | 40-question timed mock (50 min). | Fri evening or Sat morning |
 | `05-hands-on-pdi-checklist.md` | 60-90 min of clicks in a Personal Developer Instance on the features the exam names. | Fri |
 | `06-common-traps.md` | Confusable pairs the exam loves. Read the night before. | Sat |
+| `07-practice-bank-386-questions.html` | Interactive 386-question bank (5 quizzes, review mode, drag-and-drop). Your main testing tool. | Thu-Sat |
+| `08-blueprint-addendum.md` | Official blueprint sub-topics mapped to the kit, plus the topics added after reading it and the 3 official sample questions. | Fri |
 
-## Exam facts (from public blueprint summaries)
+## Exam facts (from the official blueprint, KB0012913, updated November 2025)
 
 | Item | Value |
 |---|---|
 | Domains and weights | Configuration 15% · Ingest 19% · **Govern 35%** · Insight 20% · CSDM Fundamentals 11% |
-| Format | Multiple choice + multiple select, online proctored, 90 minutes |
-| Questions | Public sources say 60 to 75. Check your exam confirmation email. |
-| Passing | Approximately 70% (ServiceNow does not publish a fixed cut score) |
-| Recommended background | CSA + about 2 years of CMDB experience |
-| Official prep | "Implementer Data Foundations (CMDB and CSDM)" credential path on ServiceNow University; official blueprint is KB0012913 on learning.servicenow.com |
+| Questions and time | **75 questions, 90 minutes** (about 72 seconds per question) |
+| Item types | Multiple choice (3+ options), multiple select (states how many to pick, **no partial credit**), **drag-and-drop matching** (three variants, **no partial credit**), scenario-based items in either format |
+| Passing | A predetermined cut score that ServiceNow does not publish and that is **not always 70%**. Section percentages on the result report do not determine the result. |
+| Delivery | Pearson VUE test centre or OnVUE online proctoring. Result shown immediately as a conditional pass/fail. |
+| Recommended background | CSA, 2+ years CMDB, CSDM foundational knowledge, experience with duplicates, lifecycle (retire/archive), compliance audit remediation, multisource/CMDB 360 |
+| Official prep courses | CMDB Fundamentals · CMDB Health Micro-Certification Simulator · Configure the CMDB Micro-Certification Simulator · CSDM Fundamentals · CMDB Health Deep Dive; extras: Introduction to CMDB Workspace, Design a Successful CMDB, Discovery / Service Mapping / ACC / Service Graph Connector / MID Server fundamentals, Now Create CMDB and CSDM Data Foundations |
+| Official practice exam | MeasureUp, see KB0013408 on ServiceNow University |
 
 Govern + Insight together are 55% of the exam. Your CMDB experience helps most in Configuration and Ingest. The
 biggest point swings are in Govern (Health, Data Manager, lifecycle, governance roles) and in CSDM terminology.
+
+**Read `08-blueprint-addendum.md` before Friday.** It maps every sub-topic on the official blueprint to the kit
+and covers the ones the first version of the study guide under-served: asset-CI alignment, the six health metrics,
+principal classes, the de-duplication wizard, Data Foundations Dashboard playbooks, Unified Map, Natural Language
+Query and CMDB saved queries. It also contains the three official sample questions.
 
 ## The 3-day plan
 
@@ -58,7 +67,7 @@ biggest point swings are in Govern (Health, Data Manager, lifecycle, governance 
 | Morning (45 min) | `06-common-traps.md`, then flashcards once more. |
 | Midday (45 min) | Redo every question you missed on both tests. If I have sent you a second mock, take it now. |
 | Afternoon | Stop studying 3 hours before the exam. Check the proctoring setup (webcam, ID, clean desk, browser). |
-| During exam | 90 min for ~60-75 questions = about 1:15 per question. Flag and move on. For multi-select, the count of correct answers is stated. Eliminate answers that name the wrong tool for the job (see traps file). |
+| During exam | 90 min for 75 questions = 72 seconds per question. Flag and move on. Multi-select states how many to pick and gives no partial credit, so never leave one short. Drag-and-drop also gives no partial credit: an unused option is allowed in one variant, and one right-hand item may match several left-hand items in another. Eliminate answers that name the wrong tool for the job (see traps file). |
 
 ## What I need from you to tune this kit
 

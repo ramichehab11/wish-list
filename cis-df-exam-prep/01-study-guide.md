@@ -1,5 +1,8 @@
 # CIS-DF Study Guide (condensed, blueprint-weighted)
 
+> Official blueprint (KB0012913, Nov 2025): 75 questions, 90 minutes, unpublished cut score. Read
+> `08-blueprint-addendum.md` after this guide; it covers the blueprint sub-topics this guide only touches on.
+
 Legend: **[core]** = expect a question. *(check)* = fact I am confident about but could not verify against the official
 docs from this sandbox; confirm in your PDI if you have one.
 
@@ -164,7 +167,9 @@ Single UI (also inside CMDB Workspace) to view the class hierarchy and, per clas
 ## 4. Domain: Govern (35%) - the biggest block
 
 ### 4.1 CMDB Health Dashboard and KPIs [core]
-Three KPIs, each built from metrics, each metric from per-class **Health Preferences** and **scorecards** (weights).
+Three KPIs built from **six metrics** (the blueprint asks for "the six metrics that make up the CMDB health score"):
+**Required fields, Recommended fields** (Completeness); **Duplicate, Orphan, Stale** (Correctness); **Audit** (Compliance).
+Each metric is driven by per-class **Health Preferences** and weighted through **scorecards**.
 
 | KPI | Metrics | Configured by |
 |---|---|---|

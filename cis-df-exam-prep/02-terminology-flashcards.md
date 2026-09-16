@@ -125,3 +125,27 @@ only those on the next pass.
 | | Class steward / data owner | Accountable for a class or data domain's quality and definitions. |
 | | Service owner / Application owner | Accountable for service records (owned_by / managed_by / support_group). |
 | | `cmdb_query_builder` | Role to create and run Query Builder queries (`_read` variant to run only). |
+
+## Block E - added from the official blueprint
+
+| | Term | Definition |
+|---|---|---|
+| | Six health metrics | Required fields, Recommended fields, Duplicate, Orphan, Stale, Audit. |
+| | CSF vs KPI | Critical Success Factor = outcome the CMDB must deliver; KPI = the measured proxy from the Health Dashboard. |
+| | Principal class | A class your organisation designates as important; health dashboards, Data Foundations Dashboard and Workspace focus on principal classes by default. |
+| | De-duplication wizard | Duplicate CI Remediator: pick the survivor CI, merge attributes, move relationships and references, retire the rest. |
+| | Playbook (Data Foundations Dashboard) | Guided fix per indicator: Summary of indicator -> Overview of problem -> Importance of addressing issue -> Fix or Improve. |
+| | Indicator (Data Foundations Dashboard) | A measured data-quality or CSDM-adoption condition, each with a playbook. |
+| | Model category | Maps a CI class to an asset class; drives asset-CI auto-creation and synchronisation. |
+| | Asset State -> CI | Changing Asset State updates CI Install status and Hardware status. |
+| | `SNAssetManagement` | Discovery source value on CIs created from an asset record. |
+| | `ServiceNow` discovery source | Discovery source value on CIs created manually in the UI or by script. |
+| | Unified Map | Single map experience replacing Dependency Views and the Application Service map; levels, filters, legend, details panel, impact. |
+| | Natural Language Query | Type a question in Query Builder; it builds the relationship query for you to refine. |
+| | CMDB saved query | Stored Query Builder query; scheduled runs and persisted results feed reports, including CMDB 360 data. |
+| | Key-value tags (`cmdb_key_value`) | Tag pairs on CIs used for compliance identifiers, tag-based services and grouping. |
+| | Non-discoverable CI | CI no tool can discover (business application, business service, contract, facility); populated manually or by import through IRE and kept current by attestation. |
+| | Technical debt (CMDB) | Customisations that block upgrades: base-table changes, IRE bypass, scripted transforms, custom relationship types, non-CSDM naming. |
+| | CMDB Librarian / Data Steward | Day-to-day data quality role: remediation tasks, attestation follow-up, stewardship of a data domain. |
+| | CI Class Owner | Accountable for a class's definition, attributes and data quality. |
+| | Cut score | Predetermined pass mark ServiceNow does not publish; not always 70%. |
