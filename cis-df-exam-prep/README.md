@@ -5,6 +5,11 @@ Exam night: Saturday. Available study time: ~3 h Thursday, Friday, Saturday dayt
 
 ## What is in this folder
 
+**Start with `index.html`.** It is the guided companion app: open it in a browser and it walks you through the
+three days with checkable steps, links into every section below, flip flashcards, self-grading tests with
+per-domain scores, the lab checklist and a button that opens the 386-question bank. Progress is saved in that
+browser. The markdown files remain the readable source of the same content.
+
 | File | Use it for | When |
 |---|---|---|
 | `01-study-guide.md` | Condensed notes per exam domain, weighted to the blueprint. CSDM section is deliberately the longest. | Thu + Fri |

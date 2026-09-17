@@ -1,0 +1,1912 @@
+<title>CIS-DF Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F3F5F8; --surface:#FFFFFF; --surface-2:#E9EEF3; --ink:#16202B; --muted:#5B6875; --line:#D6DDE5;
+  --accent:#0E5A6B; --accent-ink:#FFFFFF; --accent-soft:#DDEDF0; --warm:#B8651A; --warm-soft:#F6E8D8;
+  --ok:#2F8F5B; --ok-soft:#E1F2E8; --bad:#B9382A; --bad-soft:#F8E3DF;
+  --d-configuration:#4A6FA5; --d-ingest:#25907F; --d-govern:#6B4FA3; --d-insight:#C07B12; --d-csdm:#3E8E41;
+  --shadow:0 1px 2px rgba(22,32,43,.06),0 8px 24px rgba(22,32,43,.06);
+  --display:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F161D; --surface:#171F28; --surface-2:#1F2933; --ink:#E6EBF0; --muted:#9AA7B4; --line:#2B3744;
+  --accent:#5CC1D4; --accent-ink:#0B1217; --accent-soft:#12303A; --warm:#E4A04F; --warm-soft:#3A2A16;
+  --ok:#5DBE86; --ok-soft:#173226; --bad:#E27364; --bad-soft:#3A1F1C;
+  --d-configuration:#8FB0E0; --d-ingest:#5FC7B6; --d-govern:#A98FD8; --d-insight:#E5AE4F; --d-csdm:#7FC983;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}}
+:root[data-theme="dark"]{
+  --bg:#0F161D; --surface:#171F28; --surface-2:#1F2933; --ink:#E6EBF0; --muted:#9AA7B4; --line:#2B3744;
+  --accent:#5CC1D4; --accent-ink:#0B1217; --accent-soft:#12303A; --warm:#E4A04F; --warm-soft:#3A2A16;
+  --ok:#5DBE86; --ok-soft:#173226; --bad:#E27364; --bad-soft:#3A1F1C;
+  --d-configuration:#8FB0E0; --d-ingest:#5FC7B6; --d-govern:#A98FD8; --d-insight:#E5AE4F; --d-csdm:#7FC983;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);padding:.08em .35em;border-radius:4px}
+pre{background:var(--surface-2);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:13px}
+pre code{background:none;padding:0}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4vw,34px);font-weight:700}
+h2{font-size:22px;font-weight:700;margin-block:34px 12px}
+h3{font-size:17px;font-weight:700;margin-block:26px 8px}
+h4{font-size:15px;font-weight:600;margin-block:18px 6px}
+p{margin:0 0 12px}
+.prose{max-width:74ch}
+.prose ul,.prose ol{padding-left:22px;margin:0 0 12px}
+.prose li{margin-bottom:4px}
+.prose blockquote{margin:0 0 14px;padding:10px 14px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0}
+.prose blockquote p:last-child{margin:0}
+.prose table{border-collapse:collapse;width:100%;font-size:13.5px;margin:6px 0 18px}
+.prose th,.prose td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+.prose th{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.prose hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+.table-wrap{overflow-x:auto}
+.prose table{display:block;overflow-x:auto;white-space:normal}
+@media (min-width:700px){.prose table{display:table}}
+.prose img{max-width:100%}
+
+/* shell */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:8px}
+.brand small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.spacer{flex:1}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--surface)}
+.pill.warm{background:var(--warm-soft);border-color:transparent;color:var(--warm)}
+.ring{width:34px;height:34px;flex:none}
+.ring circle{fill:none;stroke-width:4}
+.ring .bgc{stroke:var(--line)}
+.ring .fgc{stroke:var(--accent);stroke-linecap:round;transition:stroke-dasharray .5s}
+.prog{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.app{display:grid;grid-template-columns:232px minmax(0,1fr);gap:0;min-height:calc(100vh - 56px)}
+.rail{border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:calc(56px + env(safe-area-inset-top,0px));align-self:start;height:calc(100vh - 56px);overflow:auto}
+.rail nav{display:flex;flex-direction:column;gap:2px}
+.rail a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:14px;font-weight:500}
+.rail a .k{width:22px;height:22px;border-radius:6px;background:var(--surface-2);display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--muted);flex:none}
+.rail a[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+.rail a[aria-current="page"] .k{background:var(--accent);color:var(--accent-ink)}
+.rail .grp{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:14px 10px 6px;font-weight:600}
+main{padding:28px 32px 80px;min-width:0}
+.view{display:none}.view.on{display:block}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-bottom:6px}
+.lead{font-size:16px;color:var(--muted);max-width:66ch;margin:8px 0 22px}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px 12px;overflow-x:auto}
+  .rail nav{flex-direction:row;gap:4px;width:max-content}
+  .rail .grp{display:none}
+  .rail a{white-space:nowrap;font-size:13px;padding:6px 10px}
+  main{padding:20px 16px 80px}
+  .top-in{padding:10px 16px}
+  .top .prog span{display:none}
+}
+
+/* home */
+.hero{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:20px;align-items:stretch}
+@media (max-width:860px){.hero{grid-template-columns:1fr}}
+.next{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.next::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:var(--warm)}
+.next h2{margin:6px 0 4px;font-size:20px}
+.next .meta{color:var(--muted);font-size:13px;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:9px;padding:9px 14px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600;font-size:14px;text-decoration:none;color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn:focus-visible,.opt:focus-visible,.card:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.fact .v{font-family:var(--display);font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.fact .l{font-size:12px;color:var(--muted);margin-top:2px}
+.weights{margin:26px 0 8px}
+.wbar{display:flex;height:16px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.wbar span{display:block;height:100%}
+.wleg{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px;font-size:13px}
+.wleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.dc-configuration{background:var(--d-configuration)}.dc-ingest{background:var(--d-ingest)}.dc-govern{background:var(--d-govern)}.dc-insight{background:var(--d-insight)}.dc-csdm{background:var(--d-csdm)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat .v{font-family:var(--display);font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12px;color:var(--muted)}
+.stat .bar{height:6px;border-radius:3px;background:var(--surface-2);margin-top:8px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+.howto{margin-top:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.howto div{background:var(--surface-2);border-radius:12px;padding:14px 16px;font-size:14px}
+.howto b{display:block;font-family:var(--display);font-size:15px;margin-bottom:4px}
+
+/* plan */
+.day{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+.day header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.day header h2{margin:0;font-size:20px}
+.day header .sub{color:var(--muted);font-size:13px}
+.day header .cnt{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.step{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:12px;align-items:start;padding:10px 6px;border-top:1px solid var(--line)}
+.step:first-of-type{border-top:0}
+.step input{width:18px;height:18px;margin:3px 0 0;accent-color:var(--accent)}
+.step .t{font-size:14.5px}
+.step .t a{font-size:13px;margin-left:8px;white-space:nowrap}
+.step .dur{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;padding-top:3px}
+.step.done .t{color:var(--muted);text-decoration:line-through}
+.step.next-up{background:var(--warm-soft);border-radius:8px;border-top-color:transparent}
+.step.next-up .t::before{content:"Next";font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--warm);margin-right:8px;vertical-align:1px}
+
+/* guide */
+.subnav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 22px;position:sticky;top:calc(57px + env(safe-area-inset-top,0px));background:var(--bg);padding:8px 0;z-index:5}
+.subnav a{font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:var(--ink)}
+.subnav a:hover{border-color:var(--accent)}
+
+/* flashcards */
+.cardbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.cardbar select,.cardbar label{font-size:13px}
+select{font:inherit;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.card{max-width:640px;min-height:220px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:26px 28px;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:10px;position:relative;user-select:none}
+.card .lbl{position:absolute;top:12px;left:16px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.card .blk{position:absolute;top:12px;right:16px;font-size:11px;color:var(--muted)}
+.card .term{font-family:var(--display);font-size:26px;font-weight:700;text-wrap:balance}
+.card .def{font-size:16px;line-height:1.5}
+.card .hint{font-size:12px;color:var(--muted);margin-top:8px}
+.cardacts{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.cardacts .n{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums;margin-left:auto}
+.btn.ok{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.btn.bad{background:var(--bad-soft);border-color:transparent;color:var(--bad)}
+
+/* tests */
+.tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:600;font-size:13px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.summary{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 22px;align-items:center}
+@media (max-width:700px){.summary{grid-template-columns:1fr}}
+.summary .big{font-family:var(--display);font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.summary .big small{font-size:14px;color:var(--muted);font-family:var(--body);font-weight:500}
+.dom{display:grid;grid-template-columns:110px minmax(0,1fr) 54px;gap:8px;align-items:center;font-size:12.5px}
+.dom .bar{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.dom .bar i{display:block;height:100%;width:0;transition:width .4s}
+.dom .n{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.tacts{display:flex;gap:8px;flex-wrap:wrap;grid-column:1/-1;align-items:center;border-top:1px solid var(--line);padding-top:10px}
+.tacts .timer{font-family:var(--mono);font-size:13px;color:var(--muted);margin-left:auto}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+.q .qh{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.q .num{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.chip{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;color:#fff}
+.chip.multi{background:var(--surface-2);color:var(--muted)}
+.q .qt{font-size:15px;margin-bottom:10px;max-width:74ch}
+.opts{display:grid;gap:6px}
+.opt{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;align-items:start;text-align:left;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;font-size:14px}
+.opt .l{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:2px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.qf{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.qf .res{font-weight:700;font-size:13px}
+.qf .res.ok{color:var(--ok)}.qf .res.ko{color:var(--bad)}
+.why{margin-top:10px;padding:10px 14px;border-radius:10px;background:var(--surface-2);font-size:14px}
+.why b{font-family:var(--display)}
+.q.hidden{display:none}
+
+/* labs */
+.labsec{margin-bottom:8px}
+.lab{display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;padding:9px 6px;border-top:1px solid var(--line);align-items:start}
+.lab input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent)}
+.lab.done .t{color:var(--muted)}
+.lab .extra{margin-top:6px;font-size:13px}
+.lab .extra pre{margin:4px 0}
+
+/* bank */
+.bank{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px}
+@media (max-width:860px){.bank{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.panel h3{margin-top:0}
+.cov{display:grid;grid-template-columns:minmax(0,1fr) 40px;gap:4px 10px;font-size:13px;font-variant-numeric:tabular-nums}
+.cov .n{text-align:right;color:var(--muted)}
+.cov .lo .n{color:var(--bad);font-weight:600}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<header class="top"><div class="top-in">
+  <div class="brand">CIS-DF Companion <small>Data Foundations</small></div>
+  <span class="pill warm" id="days-pill">Exam Saturday</span>
+  <div class="spacer"></div>
+  <div class="prog"><svg class="ring" viewBox="0 0 36 36" aria-hidden="true"><circle class="bgc" cx="18" cy="18" r="15.9"></circle><circle class="fgc" id="ring" cx="18" cy="18" r="15.9" stroke-dasharray="0 100" transform="rotate(-90 18 18)"></circle></svg><span id="prog-text">0% of plan done</span></div>
+</div></header>
+
+<div class="app">
+<aside class="rail"><nav id="nav">
+  <a href="#home" data-v="home"><span class="k">⌂</span>Start here</a>
+  <a href="#plan" data-v="plan"><span class="k">3d</span>Day plan</a>
+  <div class="grp">Learn</div>
+  <a href="#guide" data-v="guide"><span class="k">01</span>Study guide</a>
+  <a href="#addendum" data-v="addendum"><span class="k">08</span>Blueprint addendum</a>
+  <a href="#cards" data-v="cards"><span class="k">02</span>Flashcards</a>
+  <a href="#traps" data-v="traps"><span class="k">06</span>Traps</a>
+  <div class="grp">Test</div>
+  <a href="#tests" data-v="tests"><span class="k">03</span>Tests</a>
+  <a href="#bank" data-v="bank"><span class="k">07</span>386-question bank</a>
+  <a href="#labs" data-v="labs"><span class="k">05</span>PDI labs</a>
+</nav></aside>
+
+<main>
+
+<section class="view" data-view="home">
+  <div class="eyebrow">ServiceNow Certified Implementation Specialist</div>
+  <h1>Data Foundations (CMDB and CSDM), in three days</h1>
+  <p class="lead">Everything from the prep kit in one place, in the order to do it. Tick steps as you go; progress stays in this browser.</p>
+  <div class="hero">
+    <div class="next" id="next-card"></div>
+    <div class="facts">
+      <div class="fact"><div class="v">75</div><div class="l">questions</div></div>
+      <div class="fact"><div class="v">90</div><div class="l">minutes, 72 s per question</div></div>
+      <div class="fact"><div class="v">3</div><div class="l">item types: single, multi, drag-and-drop</div></div>
+      <div class="fact"><div class="v">0</div><div class="l">partial credit on multi-select and drag-and-drop</div></div>
+    </div>
+  </div>
+  <div class="weights">
+    <div class="eyebrow">Exam weights, official blueprint KB0012913 (Nov 2025)</div>
+    <div class="wbar"><span class="dc-configuration" style="width:15%"></span><span class="dc-ingest" style="width:19%"></span><span class="dc-govern" style="width:35%"></span><span class="dc-insight" style="width:20%"></span><span class="dc-csdm" style="width:11%"></span></div>
+    <div class="wleg"><span><i class="dc-configuration"></i>Configuration 15%</span><span><i class="dc-ingest"></i>Ingest 19%</span><span><i class="dc-govern"></i>Govern 35%</span><span><i class="dc-insight"></i>Insight 20%</span><span><i class="dc-csdm"></i>CSDM 11%</span></div>
+  </div>
+  <div class="eyebrow" style="margin-top:26px">Your progress</div>
+  <div class="stats" id="stats"></div>
+  <div class="howto">
+    <div><b>Thursday</b>Take the diagnostic cold, then CSDM and Govern. Do not read first; the diagnostic works best when it stings.</div>
+    <div><b>Friday</b>Ingest, Configuration, Insight, the blueprint addendum, 60 to 90 minutes in a PDI, then the mock.</div>
+    <div><b>Saturday</b>Traps, flashcards on unknown-only, the rest of the bank, then stop three hours before the exam.</div>
+    <div><b>Cut score</b>ServiceNow does not publish it and it is not always 70%. Aim for 80% on the bank and the mock.</div>
+  </div>
+</section>
+
+<section class="view" data-view="plan">
+  <div class="eyebrow">Day plan</div>
+  <h1>Three days, in order</h1>
+  <p class="lead">Each step links to the section it needs. The next unticked step is highlighted everywhere.</p>
+  <div id="plan"></div>
+</section>
+
+<section class="view" data-view="guide">
+  <div class="eyebrow">01 · Study guide</div>
+  <h1>Condensed notes, weighted to the blueprint</h1>
+  <p class="lead">Six sections. Section 6 (CSDM) is the longest on purpose; section 4 (Govern) is worth 35% of the exam.</p>
+  <div class="subnav" id="guide-nav"></div>
+  <article class="prose" id="guide-body"><blockquote>
+<p>Official blueprint (KB0012913, Nov 2025): 75 questions, 90 minutes, unpublished cut score. Read
+<code>08-blueprint-addendum.md</code> after this guide; it covers the blueprint sub-topics this guide only touches on.</p>
+</blockquote>
+<p>Legend: <strong>[core]</strong> = expect a question. <em>(check)</em> = fact I am confident about but could not verify against the official
+docs from this sandbox; confirm in your PDI if you have one.</p>
+<hr />
+<h2 id="1-how-the-exam-asks-questions">1. How the exam asks questions</h2>
+<p>Most CIS-DF questions are one of five shapes. Recognise the shape and half the answer is done.</p>
+<ol>
+<li><strong>"Which tool/feature would you use to..."</strong> -&gt; map the need to the OOTB feature (Class Manager vs Data Manager vs
+   Health Dashboard vs Query Builder vs CMDB 360 vs IRE). See <code>06-common-traps.md</code>.</li>
+<li><strong>"Which CSDM domain / table does X belong to"</strong> -&gt; Business Application (Design &amp; Planning) vs Application Service
+   (Service Delivery) vs Business Service (Service Consumption) vs Product Model (Foundation).</li>
+<li><strong>"What is the best practice / recommended approach"</strong> -&gt; the ServiceNow-native, IRE-respecting, least-custom answer
+   is almost always right. Never "write directly to cmdb_ci", never "customise the base class", never "use a legacy
+   import set transform map when a Service Graph Connector exists".</li>
+<li><strong>"What happens when..."</strong> (IRE payload with two matches, dependent CI without parent, policy without lifecycle
+   rule) -&gt; know the engine behaviour.</li>
+<li><strong>"Which KPI / metric / policy type"</strong> -&gt; Completeness / Correctness / Compliance; Retire / Archive / Delete /
+   Attestation / Delete CMDB related entry.</li>
+</ol>
+<hr />
+<h2 id="2-domain-configuration-15">2. Domain: Configuration (15%)</h2>
+<h3 id="21-cmdb-table-structure-core">2.1 CMDB table structure [core]</h3>
+<ul>
+<li><code>cmdb</code> is the root; <code>cmdb_ci</code> (Configuration Item) is the base class every CI class extends. Classes are tables;
+  child tables inherit parent columns (table-per-class extension).</li>
+<li>Key branches: <code>cmdb_ci_hardware</code> -&gt; <code>cmdb_ci_computer</code> -&gt; <code>cmdb_ci_server</code> -&gt; <code>cmdb_ci_win_server</code>, <code>cmdb_ci_linux_server</code>;
+  <code>cmdb_ci_appl</code> (Application) -&gt; <code>cmdb_ci_app_server</code>, databases; <code>cmdb_ci_service</code> (legacy "Service" parent) -&gt;
+  <code>cmdb_ci_service_auto</code> (Application Service), <code>cmdb_ci_service_business</code> (Business Service),
+  <code>cmdb_ci_service_technical</code> (Technical Service), <code>service_offering</code> (Service Offering);
+  <code>cmdb_ci_business_app</code> (Business Application); <code>cmdb_ci_business_capability</code>; <code>cmdb_ci_query_based_service</code>
+  (Dynamic CI Group); <code>cmdb_ci_information_object</code>.</li>
+<li>Relationships live in <code>cmdb_rel_ci</code> (parent, child, type). Types live in <code>cmdb_rel_type</code>, named
+  <code>Parent descriptor::Child descriptor</code>, e.g. <code>Depends on::Used by</code>, <code>Runs on::Runs</code>, <code>Hosted on::Hosts</code>,
+  <code>Contains::Contained by</code>, <code>Members::Member of</code>, <code>Consumes::Consumed by</code>.</li>
+<li>Models are not CIs: <code>cmdb_model</code> (Product Model, with Hardware/Software/Application model children) sits in the
+  CSDM Foundation domain. A CI points to its model via <code>model_id</code>; <code>model_category</code> links CI classes to asset classes
+  for asset-CI synchronisation.</li>
+<li>Important CI fields: <code>discovery_source</code> (choice list, one value per data source), <code>install_status</code>,
+  <code>operational_status</code>, <code>life_cycle_stage</code> + <code>life_cycle_stage_status</code> (standard lifecycle, see Govern),
+  <code>owned_by</code>, <code>managed_by</code>, <code>support_group</code>, <code>model_id</code>, <code>serial_number</code>, <code>correlation_id</code>.</li>
+</ul>
+<h3 id="22-ci-class-manager-core">2.2 CI Class Manager [core]</h3>
+<p>Single UI (also inside CMDB Workspace) to view the class hierarchy and, per class:
+- <strong>Basic info</strong>: label, table name, parent, icon, model category.
+- <strong>Attributes</strong>: add/modify columns on the class (not the base class).
+- <strong>Identification Rule</strong>: one rule per class; identifier entries with priority order (see Ingest).
+- <strong>Reconciliation Rules</strong> and <strong>Data source precedence</strong>: which sources may write which attributes.
+- <strong>Health</strong>: class-specific health preferences (inclusion rules, required/recommended fields, orphan and staleness
+  settings).
+- <strong>Suggested Relationships</strong>: relationship types recommended between this class and others; drives the picker in
+  the relationship editor.
+- <strong>Dependent Relationships</strong> (hosting and containment rules): e.g. a Network Adapter is contained by a Computer;
+  used by IRE for dependent identification.
+- <strong>Metadata</strong>: which attributes are used by CMDB features like duplicate detection or identification.
+- <strong>Class governance</strong> <em>(check)</em>: newer releases let you require approval before class changes go live.</p>
+<h3 id="23-extending-the-model-best-practices-core">2.3 Extending the model - best practices [core]</h3>
+<ul>
+<li>Extend the <strong>most specific existing class</strong> that fits (an in-house app -&gt; extend <code>cmdb_ci_appl</code>, a new server OS
+  -&gt; extend <code>cmdb_ci_server</code>). Never add a new class directly under <code>cmdb_ci</code> when a closer parent exists.</li>
+<li>Never rename or delete base-system classes or attributes; add, don't modify.</li>
+<li>Create custom classes through <strong>CI Class Manager</strong>, not by creating a table in System Definition, so the
+  identification rules, health preferences and suggested relationships get inherited and registered.</li>
+<li>Check the ServiceNow Store for a Service Graph Connector or an existing class before you build one; many
+  "missing" classes exist in the CMDB CI Class Models Store app (continuously updated class models).</li>
+<li>Before adding an attribute, ask whether the data belongs on the CI, on the Model, on the Asset, or in a related
+  table (avoid putting portfolio/business data on infrastructure classes).</li>
+</ul>
+<h3 id="24-relationships-core">2.4 Relationships [core]</h3>
+<ul>
+<li>A CI with no relationships is an <strong>orphan</strong> (Health -&gt; Correctness).</li>
+<li>Direction matters: in <code>Depends on::Used by</code>, the parent depends on the child. An Application Service <em>Depends on</em>
+  the Linux server it runs on; the server is <em>Used by</em> the service.</li>
+<li><strong>Suggested relationships</strong> are guidance; <strong>dependent relationships</strong> (containment/hosting) are enforced by IRE
+  for dependent classes.</li>
+<li>Application Services get their downstream relationships from Service Mapping (top-down), tag-based rules,
+  calculated rules, or manual entry.</li>
+</ul>
+<hr />
+<h2 id="3-domain-ingest-19">3. Domain: Ingest (19%)</h2>
+<h3 id="31-data-population-methods-and-the-order-of-preference-core">3.1 Data population methods - and the order of preference [core]</h3>
+<ol>
+<li><strong>Discovery</strong> (horizontal, agentless via MID Server, patterns/probes, credentials, schedules) and <strong>Agent Client
+   Collector (ACC)</strong> where agentless is not possible. Native, IRE-aware.</li>
+<li><strong>Service Mapping</strong> (top-down) builds Application Services and their dependency relationships; also tag-based and
+   ML-based mapping.</li>
+<li><strong>Service Graph Connectors (SGC)</strong>: ServiceNow-certified Store apps (SCCM/MECM, Intune, Jamf, AWS, Azure, GCP,
+   SolarWinds, Tanium, Qualys, CrowdStrike, ...). Built on IntegrationHub ETL, use IRE, register a discovery source
+   named <code>SG-&lt;Vendor&gt;</code>. Preferred over anything custom.</li>
+<li><strong>IntegrationHub ETL (IH-ETL)</strong>: guided, low-code UI to build a <strong>Robust Transform Engine (RTE)</strong> map from an
+   import set staging table to CMDB classes. Supports conditional class mapping, related-CI/relationship mapping,
+   preview and test with sample data, and calls IRE for you. Use it when no SGC exists.</li>
+<li><strong>Import Sets + classic Transform Maps</strong>: legacy. Writes to target tables directly and <strong>bypasses IRE</strong> unless you
+   script <code>createOrUpdateCI</code> in an onBefore/onAfter script. Not recommended for CMDB.</li>
+<li><strong>IRE API directly</strong>: <code>sn_cmdb.IdentificationEngine.createOrUpdateCI(source, jsonPayload)</code> (server script) or
+   REST <code>POST /api/now/identifyreconcile</code>. Fine for integrations that must push.</li>
+<li><strong>Direct writes to cmdb_ci tables</strong> (GlideRecord insert, list edit, Import set without IRE): never for bulk data;
+   produces duplicates and breaks reconciliation.</li>
+</ol>
+<h3 id="32-ire-identification-core">3.2 IRE - Identification [core]</h3>
+<ul>
+<li>Every payload item names a class and attribute values; IRE finds the <strong>identification rule</strong> for that class (own
+  rule, or inherited from the nearest ancestor that has one).</li>
+<li>An identification rule has ordered <strong>identifier entries</strong>. Entries are tried in priority order; the <strong>first entry
+  that finds a match wins</strong>; if no entry matches, IRE <strong>inserts</strong> a new CI. If an entry finds <strong>more than one</strong>
+  match, IRE does not guess: it flags the duplicates (creates a <strong>de-duplication task</strong>, <code>reconcile_duplicate_task</code>)
+  and by default updates the first/oldest match <em>(check which one on your release)</em>.</li>
+<li>Entry types:</li>
+<li><strong>Independent</strong>: CI can be identified on its own attributes (server by serial number, then by name+class).</li>
+<li><strong>Dependent</strong>: CI only makes sense with a parent (network adapter, disk, running process, database instance on a
+    host). The identifier includes a dependency on the parent's identity; the payload <strong>must include the parent CI
+    and the relationship</strong> or IRE returns an error.</li>
+<li><strong>Lookup-based</strong>: matches on a related lookup table rather than a CI attribute, e.g. <code>cmdb_serial_number</code> (several
+    serial numbers per hardware CI) or MAC addresses.</li>
+<li><strong>Related-entry</strong>: uses a related table (not a lookup) for matching <em>(check)</em>.</li>
+<li>Entry options: <strong>Allow null attribute</strong> (match even when the attribute is empty; risky), <strong>Enforce exact count
+  match</strong> (all criterion attributes must be present), <code>Search on table</code> (match against a parent table so a CI stored
+  in a different subclass is still found; prevents cross-class duplicates).</li>
+<li><strong>Identification inclusion rules</strong> narrow which existing records are candidates (e.g. only active CIs, only CIs in
+  a given domain), reducing false matches and speeding identification.</li>
+<li><strong>Identification simulation</strong> (CMDB Workspace) lets you test a JSON payload against the rules without committing.</li>
+<li><strong>Metadata rules / class metadata</strong> define which attributes count as identifying vs. informational.</li>
+<li>Test question logic: "duplicates keep appearing from source X" -&gt; source bypasses IRE, or the class has no usable
+  identifier (rule relies on attributes the source does not send), or Allow null attribute is on.</li>
+</ul>
+<h3 id="33-ire-reconciliation-core">3.3 IRE - Reconciliation [core]</h3>
+<ul>
+<li><strong>Reconciliation rules</strong>: per class (and optionally per attribute list), which <strong>data sources</strong> are allowed to
+  update. If a source is not authorised for the attribute, IRE identifies the CI but does not overwrite that field.</li>
+<li><strong>Data source precedence rules</strong>: ordering of sources for a class/attribute set. <strong>Lower priority number = higher
+  authority</strong> (100 beats 200). Highest-authority source that has written the attribute owns it.</li>
+<li><strong>Data refresh rules</strong>: let a <strong>lower-priority source overwrite</strong> an attribute when the higher-priority source has
+  <strong>not updated it for N days</strong>. This is the answer to "SCCM should be able to update a server that Discovery stopped
+  seeing 30 days ago".</li>
+<li><strong>Staleness rules</strong> (reconciliation) mark data from a source stale after a period; different from Health staleness
+  (see Govern) <em>(check the exact naming on your release)</em>.</li>
+<li><strong>Discovery sources</strong> must exist in the <code>discovery_source</code> choice list; a payload with an unregistered source is
+  rejected. SGC and IH-ETL register theirs.</li>
+<li><code>createOrUpdateCI</code> vs <code>identifyCI</code>: the second only reports what would match, no writes.</li>
+</ul>
+<h3 id="34-multisource-cmdb-core">3.4 Multisource CMDB [core]</h3>
+<ul>
+<li>Off by default; enabled via a system property in the IRE / Multisource settings <em>(check)</em>. When on, IRE stores the
+  <strong>value each source reported for each attribute</strong> in multisource tables, in addition to the reconciled value on the
+  CI.</li>
+<li>Enables <strong>CMDB 360</strong> (compare sources per CI) and the <strong>multisource Query Builder</strong> view ("which CIs did SCCM
+  report that Discovery did not").</li>
+<li>Exam angle: "you need to see what each integration reported for the same CI" -&gt; enable Multisource, use CMDB 360.</li>
+</ul>
+<h3 id="35-discovery-and-service-mapping-essentials-as-they-appear-on-this-exam">3.5 Discovery and Service Mapping essentials (as they appear on this exam)</h3>
+<ul>
+<li>MID Server sits inside the network, runs probes/patterns, talks outbound to the instance. Credentials are stored
+  on the instance (or an external vault) and used by the MID Server.</li>
+<li>Horizontal discovery: IP ranges -&gt; Shazzam port scan -&gt; classification -&gt; identification -&gt; exploration
+  (patterns). Produces infrastructure CIs and hosting/containment relationships, not business context.</li>
+<li>Top-down (Service Mapping): starts from an entry point (URL, host:port) and walks the connections to build an
+  Application Service with its dependency map.</li>
+<li>Application Service population options: Mapped (Service Mapping), Tag-based, Calculated, Manual, and Dynamic CI
+  Groups for Technical Service Offerings.</li>
+<li>Cloud discovery uses cloud accounts/service accounts and API calls rather than agents.</li>
+</ul>
+<hr />
+<h2 id="4-domain-govern-35-the-biggest-block">4. Domain: Govern (35%) - the biggest block</h2>
+<h3 id="41-cmdb-health-dashboard-and-kpis-core">4.1 CMDB Health Dashboard and KPIs [core]</h3>
+<p>Three KPIs built from <strong>six metrics</strong> (the blueprint asks for "the six metrics that make up the CMDB health score"):
+<strong>Required fields, Recommended fields</strong> (Completeness); <strong>Duplicate, Orphan, Stale</strong> (Correctness); <strong>Audit</strong> (Compliance).
+Each metric is driven by per-class <strong>Health Preferences</strong> and weighted through <strong>scorecards</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>KPI</th>
+<th>Metrics</th>
+<th>Configured by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Completeness</strong></td>
+<td><strong>Required fields</strong> populated, <strong>Recommended fields</strong> populated</td>
+<td>Health Preferences -&gt; Required/Recommended fields per class</td>
+</tr>
+<tr>
+<td><strong>Correctness</strong></td>
+<td><strong>Duplicate</strong> CIs, <strong>Orphan</strong> CIs (no relationships), <strong>Stale</strong> CIs (not updated within threshold), plus relationship correctness checks (required/recommended relationships)</td>
+<td>Orphan rules, Staleness rules, identification rules (for duplicate detection), relationship health rules</td>
+</tr>
+<tr>
+<td><strong>Compliance</strong></td>
+<td>Results of <strong>audits</strong> (desired-state / certification audits) run against CIs</td>
+<td>Audit definitions (Data Certification and Compliance)</td>
+</tr>
+</tbody>
+</table>
+<p>Key behaviours:
+- Health jobs (Completeness/Correctness/Compliance score calculation, health remediation) are <strong>disabled by
+  default</strong>; you enable them and schedule them.
+- <strong>Inclusion rules</strong> define which CIs of a class are evaluated (e.g. exclude retired CIs).
+- <strong>Scorecards</strong> decide the weight of each metric/KPI in the aggregated score at CI, class, group and CMDB level.
+- <strong>CMDB Groups</strong> (<code>cmdb_group</code>; membership by manual list or a saved Query Builder query) give you health per
+  business slice ("health of everything supporting Payroll").
+- Health preferences cascade from <code>cmdb_ci</code> downwards; override at the class level that needs different rules.
+- <strong>Remediation</strong>: Health dashboard -&gt; remediation via Flow Designer flows/subflows (e.g. remediate stale CIs, retire
+  orphans), the <strong>Duplicate CI Remediator</strong> (merge duplicates into one survivor and re-point relationships/references),
+  and de-duplication tasks worked in CMDB Workspace.
+- Duplicate detection uses the class <strong>identification rule</strong>, so a class with a weak identifier reports few duplicates
+  even when data is dirty. "Fix the identifier first" is a common correct answer.</p>
+<h3 id="42-cmdb-data-manager-core">4.2 CMDB Data Manager [core]</h3>
+<p>Policy engine for <strong>CI lifecycle governance</strong>, located in CMDB Workspace.</p>
+<table>
+<thead>
+<tr>
+<th>Policy type</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Retire</strong></td>
+<td>Sets matching CIs to the Retired lifecycle stage (with proper status) on schedule</td>
+</tr>
+<tr>
+<td><strong>Archive</strong></td>
+<td>Moves matching CIs (and related data per archive rules) to archive tables</td>
+</tr>
+<tr>
+<td><strong>Delete</strong></td>
+<td>Deletes matching CIs</td>
+</tr>
+<tr>
+<td><strong>Attestation</strong></td>
+<td>Creates attestation tasks for owners to confirm the CI data is still correct</td>
+</tr>
+<tr>
+<td><strong>Delete CMDB related entry</strong></td>
+<td>Removes related records (relationships, key values, etc.) rather than the CI</td>
+</tr>
+</tbody>
+</table>
+<p>Rules of the game:
+- Policies have a <strong>condition/filter</strong>, a <strong>schedule</strong>, an optional <strong>approval</strong> step, and a <strong>life-cycle rule
+  dependency</strong>: Retire, Archive and Delete policies require an <strong>active life-cycle rule for every class in scope</strong>;
+  otherwise the policy cannot run.
+- Policies run in a sequence retire -&gt; archive -&gt; delete typical of a retention standard; each has its own policy.
+- Attestation results feed governance ("owner certified in the last 90 days").</p>
+<h3 id="43-ci-lifecycle-management-core">4.3 CI Lifecycle Management [core]</h3>
+<ul>
+<li>Standardised lifecycle fields on <code>cmdb_ci</code>: <strong>Life cycle stage</strong> (<code>life_cycle_stage</code>: e.g. Design/Operational/
+  End of Life/Retired <em>(check list)</em>) and <strong>Life cycle stage status</strong> (<code>life_cycle_stage_status</code>: e.g. Operational -&gt;
+  Operational/Non-operational/Repair in progress...). Replaces relying on <code>install_status</code> + <code>operational_status</code>
+  alone; those legacy fields can be kept in sync.</li>
+<li><strong>Life cycle rules</strong> per class define which stage/status combinations are valid and how legacy status values map.</li>
+<li>Data Manager, Health inclusion rules and CSDM adoption dashboards read these fields, which is why the exam ties
+  "activate lifecycle rules" to "make Data Manager policies work".</li>
+</ul>
+<h3 id="44-governance-framework-people-and-process">4.4 Governance framework (people and process)</h3>
+<ul>
+<li><strong>Configuration Management Process Owner / Configuration Manager</strong>: owns the CMDB policy, standards and KPIs.</li>
+<li><strong>CMDB Governance Board / Configuration Control Board (CCB)</strong>: approves class model changes, new data sources,
+  attribute additions, and reviews health trends.</li>
+<li><strong>CI class stewards / data owners</strong> per class or domain; <strong>Service Owners</strong> and <strong>Application Owners</strong> own CSDM
+  service records (<code>owned_by</code>, <code>managed_by</code>, <code>support_group</code>).</li>
+<li><strong>Data sources register</strong>: every integration is registered as a discovery source with an owner and reconciliation
+  rules before it goes live.</li>
+<li>Governance cadence: health review, attestation cycle, class-change approvals, audit/compliance reporting.</li>
+<li>Foundation data governance (Company, Location, Department, Business Unit, Cost Center, User, Group, Vendor,
+  Manufacturer, Product Model) is a prerequisite: services and CIs reference these, so their quality caps CMDB quality.</li>
+<li>Roles you may be asked about: <code>itil</code> (read/relate CIs in tasks), <code>cmdb_read</code>, <code>asset</code>/<code>model_manager</code> for models,
+  <code>cmdb_query_builder</code> / <code>cmdb_query_builder_read</code> for Query Builder, <code>sn_cmdb_editor</code>-type roles for the Workspace
+  <em>(check exact role names on your release)</em>, <code>admin</code> for Class Manager changes.</li>
+</ul>
+<h3 id="45-data-certification-and-audit">4.5 Data Certification and Audit</h3>
+<ul>
+<li><strong>Data Certification</strong>: schedules and assigns certification tasks asking users to verify records (CIs or any table)
+  field by field. Older mechanism, still referenced.</li>
+<li><strong>Audit (Compliance)</strong>: defines a desired state and reports non-compliant CIs; feeds the Compliance KPI.</li>
+<li><strong>Attestation</strong> (Data Manager): the CMDB-Workspace-era equivalent focused on CI owners.</li>
+</ul>
+<h3 id="46-csdm-data-foundations-dashboard-core">4.6 CSDM Data Foundations Dashboard [core]</h3>
+<ul>
+<li>ServiceNow Store app ("CMDB and CSDM Data Foundations Dashboard"): shows <strong>CSDM adoption/maturity indicators</strong> per
+  stage (Crawl/Walk/Run/Fly) alongside CMDB health signals, e.g. Application Services without relationships,
+  Business Applications without Application Services, Service Offerings missing owners.</li>
+<li>Exam angle: "measure CSDM maturity" -&gt; this dashboard, not the Health Dashboard.</li>
+</ul>
+<hr />
+<h2 id="5-domain-insight-20">5. Domain: Insight (20%)</h2>
+<h3 id="51-cmdb-workspace-core">5.1 CMDB Workspace [core]</h3>
+<ul>
+<li>Modern (Next Experience) home for configuration managers: overview health tiles, <strong>Health</strong>, <strong>Data Manager</strong>,
+  <strong>Query Builder</strong>, <strong>Class Manager</strong>, <strong>CMDB 360</strong>, <strong>IRE simulation</strong>, remediation and attestation task lists,
+  data-source views. Replaces the legacy CMDB Dashboard / CMDB Home for day-to-day work.</li>
+</ul>
+<h3 id="52-cmdb-360-core">5.2 CMDB 360 [core]</h3>
+<ul>
+<li>Per-CI view of <strong>what each data source reported</strong> for each attribute versus the reconciled value; highlights
+  conflicts and gaps. <strong>Requires Multisource CMDB</strong> to be enabled and populated.</li>
+</ul>
+<h3 id="53-cmdb-query-builder-core">5.3 CMDB Query Builder [core]</h3>
+<ul>
+<li>Drag-and-drop canvas to build <strong>multi-class, relationship-aware queries</strong> ("all Windows servers used by
+  Application Services that support Business Service X, with their owners"). Runs on demand or on schedule, results
+  can be saved, exported, used for <strong>CMDB Groups</strong>, and for <strong>multisource comparisons</strong>.</li>
+<li>Not a report designer: use it for relationship traversal, then report on the results.</li>
+</ul>
+<h3 id="54-dependency-views-and-application-service-maps">5.4 Dependency Views and Application Service maps</h3>
+<ul>
+<li><strong>Dependency Views</strong> (BSM map) show upstream/downstream relationships from any CI; <strong>Application Service map</strong>
+  shows the mapped service topology; newer releases offer a <strong>Unified Map</strong> experience <em>(check)</em>.</li>
+<li>Used for impact analysis in Incident/Change, and to verify CSDM linkage (Service Offering -&gt; Application Service
+  -&gt; infrastructure).</li>
+</ul>
+<h3 id="55-reporting-and-analytics">5.5 Reporting and analytics</h3>
+<ul>
+<li>Health KPIs are available in Performance Analytics dashboards (trend over time), the Health Dashboard shows the
+  current state.</li>
+<li>Reports on <code>cmdb_ci</code> children and <code>cmdb_rel_ci</code>; use Query Builder when the question spans classes through
+  relationships. Dot-walk on <code>cmdb_rel_ci</code> for simple two-hop questions.</li>
+<li>CSDM Data Foundations Dashboard = maturity/adoption insight; CMDB Health Dashboard = data quality insight;
+  CMDB 360 = source-level insight; Dependency Views = topology insight.</li>
+</ul>
+<hr />
+<h2 id="6-domain-csdm-fundamentals-11-officially-but-its-vocabulary-appears-across-the-other-89">6. Domain: CSDM Fundamentals (11% officially, but its vocabulary appears across the other 89%)</h2>
+<h3 id="61-what-csdm-is">6.1 What CSDM is</h3>
+<ul>
+<li>A <strong>standard, prescriptive data model and set of guidelines</strong> for using the OOTB CMDB tables (and related
+  non-CMDB tables) so that all ServiceNow products (ITSM, ITOM, APM, SPM, SecOps, HAM/SAM, IRM) share the same
+  definitions. It is <strong>not a product to install</strong>; it is a way to use tables that already exist, expressed as a
+  white paper + a set of Store dashboards.</li>
+<li>Principle: put each kind of information in the table designed for it, relate them with the prescribed relationship
+  types, and adopt incrementally (<strong>Crawl -&gt; Walk -&gt; Run -&gt; Fly</strong>).</li>
+</ul>
+<h3 id="62-domains-csdm-4-vs-csdm-5-core">6.2 Domains - CSDM 4 vs CSDM 5 [core]</h3>
+<table>
+<thead>
+<tr>
+<th>CSDM 4.0 (6 domains)</th>
+<th>CSDM 5.0 (7 domains)</th>
+<th>What lives there</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Foundation</td>
+<td><strong>Foundation</strong></td>
+<td>Company, Business Unit, Department, Cost Center, Location, User, Group, CMDB Group, Product Model, Vendor/Manufacturer, Business Process, Contract, Value Stream, Product Feature, SBOM (new in 5)</td>
+</tr>
+<tr>
+<td>-</td>
+<td><strong>Ideation &amp; Strategy</strong> (new)</td>
+<td>Product Idea, Planning Item (demand, project, epic), Strategic Plan, Strategic Priority, Goal, Target</td>
+</tr>
+<tr>
+<td>Design</td>
+<td><strong>Design &amp; Planning</strong></td>
+<td>Business Capability, <strong>Business Application</strong>, Information Object</td>
+</tr>
+<tr>
+<td>Build</td>
+<td><strong>Build &amp; Integration</strong></td>
+<td>DevOps change data model (pipelines, repositories, SDLC components), AI System digital asset</td>
+</tr>
+<tr>
+<td>Manage Technical Services</td>
+<td><strong>Service Delivery</strong></td>
+<td><strong>Application Service</strong> (and its subtypes), Service Instance, Service Delivery Network, API, Application, AI Function/AI Application, OT, infrastructure CIs, <strong>Technology Management Service</strong> (was Technical Service) and its <strong>Service Offering</strong>, <strong>Dynamic CI Group</strong></td>
+</tr>
+<tr>
+<td>Sell/Consume</td>
+<td><strong>Service Consumption</strong></td>
+<td><strong>Business Service</strong>, <strong>Business Service Offering</strong>, Request Catalog items linked to offerings</td>
+</tr>
+<tr>
+<td>Manage Portfolio</td>
+<td><strong>Manage Portfolios</strong></td>
+<td>Service Portfolio, Application Portfolio, Product/Technology portfolios that group the above</td>
+</tr>
+</tbody>
+</table>
+<p>CSDM 3.0 had four domains (Foundation, Design, Manage Technical Services, Sell/Consume); 4.0 added Build and Manage
+Portfolio; 5.0 added Ideation &amp; Strategy and renamed the rest. Expect at least one question on the renames and one on
+which domain a table belongs to.</p>
+<h3 id="63-the-tables-you-must-be-able-to-tell-apart-core">6.3 The tables you must be able to tell apart [core]</h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Table</th>
+<th>Domain</th>
+<th>One-line meaning</th>
+<th>Used in Incident/Change?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Business Application</strong></td>
+<td><code>cmdb_ci_business_app</code></td>
+<td>Design &amp; Planning</td>
+<td>The software <em>as a portfolio item</em>: "SAP ERP", "Workday". Owned by APM, has lifecycle, cost, business capability links. <strong>Not</strong> an operational CI, <strong>no</strong> infrastructure relationships.</td>
+<td>No (impact comes via its Application Services)</td>
+</tr>
+<tr>
+<td><strong>Application Service</strong></td>
+<td><code>cmdb_ci_service_auto</code> (subtypes: Mapped <code>cmdb_ci_service_discovered</code>, Calculated, Tag-based, Manual)</td>
+<td>Service Delivery</td>
+<td>A <strong>deployed, running instance</strong> of an application in an environment: "SAP ERP - PROD EMEA". Has a dependency map to servers/DBs.</td>
+<td>Yes: the operational CI for impact, monitoring, change</td>
+</tr>
+<tr>
+<td><strong>Technical / Technology Management Service</strong></td>
+<td><code>cmdb_ci_service_technical</code></td>
+<td>Service Delivery</td>
+<td>An IT-provider service: "Windows Server Hosting", "Database Management". Owned by an IT team.</td>
+<td>Via its offerings</td>
+</tr>
+<tr>
+<td><strong>Technical Service Offering</strong></td>
+<td><code>service_offering</code> (parent = technical service)</td>
+<td>Service Delivery</td>
+<td>A specific level/variant of the technical service, with commitments (SLA), support group, and linked infrastructure via <strong>Dynamic CI Groups</strong></td>
+<td>Yes, in the Service offering field for infra-type work</td>
+</tr>
+<tr>
+<td><strong>Business Service</strong></td>
+<td><code>cmdb_ci_service_business</code></td>
+<td>Service Consumption</td>
+<td>A service <strong>consumed by the business</strong> or customers: "Email", "Payroll", "Order Management". Owned by a service owner.</td>
+<td>Yes: Incident "Service" field</td>
+</tr>
+<tr>
+<td><strong>Business Service Offering</strong></td>
+<td><code>service_offering</code> (parent = business service)</td>
+<td>Service Consumption</td>
+<td>A consumable variant with audience, SLA, hours, price: "Email - VIP", "Payroll - Germany"</td>
+<td>Yes: Incident "Service offering" field</td>
+</tr>
+<tr>
+<td><strong>Dynamic CI Group</strong></td>
+<td><code>cmdb_ci_query_based_service</code></td>
+<td>Service Delivery</td>
+<td>Query-defined set of CIs (all PROD Oracle DBs) that stands in for infrastructure under a Technical Service Offering</td>
+<td>Indirectly</td>
+</tr>
+<tr>
+<td><strong>Business Capability</strong></td>
+<td><code>cmdb_ci_business_capability</code></td>
+<td>Design &amp; Planning</td>
+<td>What the business <em>does</em> ("Manage Payroll"), realised by Business Applications</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Information Object</strong></td>
+<td><code>cmdb_ci_information_object</code></td>
+<td>Design &amp; Planning</td>
+<td>Data entity an application creates/uses ("Customer record")</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Product Model</strong></td>
+<td><code>cmdb_model</code></td>
+<td>Foundation</td>
+<td>The catalogue definition ("Dell R750", "Windows Server 2022"); a CI references it</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Service Portfolio</strong></td>
+<td><code>spm_service_portfolio</code> <em>(check)</em></td>
+<td>Manage Portfolios</td>
+<td>Grouping of services for portfolio management</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Legacy "Business Service"</strong></td>
+<td><code>cmdb_ci_service</code></td>
+<td>(parent table)</td>
+<td>Old catch-all. CSDM says: <strong>do not create records directly here</strong>; use the specific child classes</td>
+<td>Avoid</td>
+</tr>
+</tbody>
+</table>
+<p>Memory hook: <strong>Business Application = what you own; Application Service = what is running; Business Service = what
+the business consumes; Technical Service = what IT provides to itself; Offerings = the levels you can pick.</strong></p>
+<h3 id="64-prescribed-relationships-and-references-core">6.4 Prescribed relationships and references [core]</h3>
+<ul>
+<li>Business Application <strong><code>Consumes::Consumed by</code></strong> Application Service <em>(check direction on your release; it is the
+  CSDM-documented link between the portfolio record and its running instances)</em>.</li>
+<li>Application Service <strong><code>Depends on::Used by</code></strong> infrastructure CIs (servers, databases, load balancers) and other
+  Application Services.</li>
+<li>Business Service Offering / Business Service <strong><code>Depends on::Used by</code></strong> Application Service.</li>
+<li>Technical Service Offering <strong><code>Depends on::Used by</code></strong> Dynamic CI Group / infrastructure; Dynamic CI Group
+  membership is by query, not by relationship records.</li>
+<li><strong>Service Offering -&gt; Service is a reference field (<code>parent</code>)</strong>, not a relationship.</li>
+<li>Business Capability &lt;-&gt; Business Application via relationship; Business Application -&gt; Business Capability drives
+  APM heat maps.</li>
+<li>Product Model -&gt; CI via <strong>reference</strong> (<code>model_id</code>), not a relationship.</li>
+<li>Task records: <strong>Service</strong> (<code>business_service</code>), <strong>Service offering</strong> (<code>service_offering</code>), <strong>Configuration item</strong>
+  (<code>cmdb_ci</code>). CSDM guidance: Service = the Business Service or Application Service impacted; Service offering = the
+  specific offering; CI = the technical CI at fault. Ideally the CI is related to the Service so the choices filter.</li>
+</ul>
+<h3 id="65-crawl-walk-run-fly-core">6.5 Crawl / Walk / Run / Fly [core]</h3>
+<p>Exact placement varies slightly between CSDM 4 and 5 material; this is the commonly taught version.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Add these</th>
+<th>Enables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Crawl</strong></td>
+<td>Foundation data cleaned up (Company, Location, Group, User, Product Model); <strong>Application Services</strong> (at least manually); Business Applications registered; infrastructure CIs with basic relationships</td>
+<td>Incident/Change impact on application services; APM inventory</td>
+</tr>
+<tr>
+<td><strong>Walk</strong></td>
+<td><strong>Technical Services + Technical Service Offerings</strong>, <strong>Dynamic CI Groups</strong>, <strong>Business Capabilities</strong>, Application Services mapped (Service Mapping / tag-based), owner fields populated</td>
+<td>Support-team accountability, better routing, application rationalisation</td>
+</tr>
+<tr>
+<td><strong>Run</strong></td>
+<td><strong>Business Services + Business Service Offerings</strong>, Service Portfolio, request catalog linked to offerings, SLAs per offering</td>
+<td>Service-level reporting, customer-facing service catalog, SPM</td>
+</tr>
+<tr>
+<td><strong>Fly</strong></td>
+<td>Full portfolio management, Information Objects, Business Processes/Value Streams, DevOps and Ideation links, cost and demand tied to services, AI/OT/API items in CSDM 5</td>
+<td>Enterprise architecture, value-stream and product-centric operating model</td>
+</tr>
+</tbody>
+</table>
+<p>Rule of thumb for questions: <strong>Crawl = Application Service and foundation; Walk = Technical side; Run = Business
+(consumer) side; Fly = everything strategic.</strong></p>
+<h3 id="66-csdm-and-other-products-why-it-matters">6.6 CSDM and other products (why it matters)</h3>
+<ul>
+<li><strong>ITSM</strong>: Incident/Problem/Change reference Services, Offerings and CIs consistently -&gt; reporting per service.</li>
+<li><strong>APM</strong>: Business Applications, Capabilities, Information Objects; needs Application Services to link to reality.</li>
+<li><strong>SPM/ITBM</strong>: Service Portfolios, Demand -&gt; Ideation &amp; Strategy in CSDM 5.</li>
+<li><strong>ITOM</strong>: Discovery/Service Mapping populate Service Delivery; Event Management alerts roll up to Application
+  Services and then to Business Services for impact.</li>
+<li><strong>HAM/SAM</strong>: Models and Assets in Foundation, tied to CIs.</li>
+<li><strong>SecOps/VR/IRM</strong>: vulnerabilities on CIs roll up to services for risk-based prioritisation.</li>
+<li>That is why CIS-DF is a <strong>prerequisite</strong> for CIS-ITSM, CIS-Discovery, CIS-Service Mapping, CIS-HAM, CIS-SAM,
+  CIS-SIR and CIS-VR.</li>
+</ul>
+<h3 id="67-csdm-implementation-guidance-the-exam-likes">6.7 CSDM implementation guidance the exam likes</h3>
+<ul>
+<li>Start with a <strong>use case</strong> (impact analysis, service reporting, app rationalisation), pick the stage that delivers
+  it, and stop there until the data is governed.</li>
+<li><strong>Do not customise</strong> the model to fit old naming; map old records to the right CSDM tables (classic mistake:
+  everything sitting in <code>cmdb_ci_service</code>).</li>
+<li>Assign <strong>owners</strong> to every service record; a service without an owner is a governance failure, not a modelling one.</li>
+<li>Use the <strong>CSDM Data Foundations Dashboard</strong> and CMDB Health to measure progress per stage.</li>
+<li>Business Applications are <strong>not</strong> used for outages; Application Services are. Do not relate infrastructure to
+  Business Applications.</li>
+<li>Environment (PROD/TEST/DEV) is an attribute of the <strong>Application Service</strong>, not separate Business Applications.</li>
+</ul></article>
+</section>
+
+<section class="view" data-view="addendum">
+  <div class="eyebrow">08 · Blueprint addendum</div>
+  <h1>What the official blueprint adds</h1>
+  <p class="lead">Every official sub-topic mapped to the kit, the topics added after reading it, the three official sample questions and three drag-and-drop drills.</p>
+  <article class="prose"><p>Source: ServiceNow University KB0012913, "CIS - Data Foundations (CMDB and CSDM) Exam - Mainline Blueprint",
+updated November 2025. The blueprint says its sub-topic list is not all-inclusive, so treat this as the floor.
+<em>(check)</em> marks details I am confident about but could not verify against product docs from this sandbox.</p>
+<h2 id="1-sub-topic-map">1. Sub-topic map</h2>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Official sub-topic</th>
+<th>Where it is covered</th>
+<th>Gap closed below</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Configuration 15%</td>
+<td>CI Class Manager: table, class attributes, hierarchy</td>
+<td>Guide 2.1-2.3</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>When and how to use IRE</td>
+<td>Guide 3.2-3.3</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>When and how to configure CMDB 360 / multisource CMDB</td>
+<td>Guide 3.4, 5.2</td>
+<td>Section 2.6</td>
+</tr>
+<tr>
+<td>Ingest 19%</td>
+<td>How relationships are auto or manually populated</td>
+<td>Guide 2.4, 3.5</td>
+<td>Section 2.4</td>
+</tr>
+<tr>
+<td></td>
+<td>Automation opportunities for CMDB integration</td>
+<td>Guide 3.1</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Which data ingestion method to use</td>
+<td>Guide 3.1, traps table</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Minimise technical debt and ensure upgradeability</td>
+<td>partly 2.3</td>
+<td>Section 2.5</td>
+</tr>
+<tr>
+<td></td>
+<td>Populate and maintain non-discoverable/manual CIs and attributes</td>
+<td>thin</td>
+<td>Section 2.3</td>
+</tr>
+<tr>
+<td></td>
+<td>Track security and regulatory compliance identifiers against CSDM objects</td>
+<td>missing</td>
+<td>Section 2.7</td>
+</tr>
+<tr>
+<td></td>
+<td>How Asset and CI align</td>
+<td>missing</td>
+<td><strong>Section 2.1</strong></td>
+</tr>
+<tr>
+<td>Govern 35%</td>
+<td>Six metrics of the CMDB health score</td>
+<td>Guide 4.1 (now names them)</td>
+<td>Section 2.2</td>
+</tr>
+<tr>
+<td></td>
+<td>Purpose and requirements of Data Manager</td>
+<td>Guide 4.2</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Goals of good CMDB governance; what is needed to govern; key roles</td>
+<td>Guide 4.4</td>
+<td>Section 2.9</td>
+</tr>
+<tr>
+<td></td>
+<td>Health Dashboards for KPIs and Critical Success Factors</td>
+<td>Guide 4.1</td>
+<td>Section 2.2</td>
+</tr>
+<tr>
+<td></td>
+<td>Why duplicates are created and how to remediate; <strong>deduplication wizard</strong></td>
+<td>Guide 3.2, 4.1</td>
+<td>Section 2.8</td>
+</tr>
+<tr>
+<td></td>
+<td>Operationalise the CMDB</td>
+<td>Guide 4.4</td>
+<td>Section 2.9</td>
+</tr>
+<tr>
+<td></td>
+<td>CMDB Workspace: when, why, features</td>
+<td>Guide 5.1</td>
+<td>Section 2.10</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Define principal classes</strong></td>
+<td>missing</td>
+<td><strong>Section 2.11</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Which Data Manager policy fits the scenario</td>
+<td>Guide 4.2</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Validate data quality/compliance in the Health Dashboard</td>
+<td>Guide 4.1</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Improve data quality with the CMDB Data Foundations Dashboard</td>
+<td>Guide 4.6</td>
+<td>Section 2.12</td>
+</tr>
+<tr>
+<td></td>
+<td>Manage life cycle CI attributes between CIs</td>
+<td>Guide 4.3</td>
+<td>Section 2.13</td>
+</tr>
+<tr>
+<td>Insight 20%</td>
+<td>Business value of CMDB</td>
+<td>missing</td>
+<td><strong>Section 2.14</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Natural Language Query</strong></td>
+<td>missing</td>
+<td>Section 2.15</td>
+</tr>
+<tr>
+<td></td>
+<td>Custom reports using CMDB 360 data (<strong>CMDB Saved Queries</strong>)</td>
+<td>thin</td>
+<td>Section 2.15</td>
+</tr>
+<tr>
+<td></td>
+<td>Complex relationship queries with a full result set</td>
+<td>Guide 5.3</td>
+<td>Section 2.15</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Unified Map</strong> / dependency view map components and usage</td>
+<td>Guide 5.4</td>
+<td>Section 2.16</td>
+</tr>
+<tr>
+<td></td>
+<td>Outcomes of ServiceNow products leveraging CMDB data</td>
+<td>Guide 6.6</td>
+<td>Section 2.14</td>
+</tr>
+<tr>
+<td></td>
+<td>Benefits of, and when to use, CMDB Foundation Dashboards and <strong>Playbooks</strong></td>
+<td>missing</td>
+<td><strong>Section 2.12</strong></td>
+</tr>
+<tr>
+<td>CSDM 11%</td>
+<td>Map CIs to the correct CSDM domain with stakeholders across industries</td>
+<td>Guide 6.2-6.4</td>
+<td>Section 2.17</td>
+</tr>
+<tr>
+<td></td>
+<td>Approach to abide by CSDM</td>
+<td>Guide 6.5, 6.7</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Benefits of implementing CSDM</td>
+<td>Guide 6.6</td>
+<td>Section 2.17</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-topics-added-after-reading-the-blueprint">2. Topics added after reading the blueprint</h2>
+<h3 id="21-asset-and-ci-alignment-core-two-of-the-three-official-sample-questions-are-about-this">2.1 Asset and CI alignment [core: two of the three official sample questions are about this]</h3>
+<ul>
+<li><strong>Asset</strong> (<code>alm_asset</code>, with <code>alm_hardware</code>, <code>alm_license</code>, <code>alm_consumable</code>, <code>alm_facility</code>) is the financial and
+  contractual view: cost, owner, contract, depreciation, state. <strong>CI</strong> is the operational and technical view:
+  configuration, relationships, impact. One hardware asset maps to one CI, linked by the <code>ci</code> field on the asset and
+  the <code>asset</code> field on the CI.</li>
+<li>The link is driven by <strong>Model Category</strong> (<code>cmdb_model_category</code>): it maps a CI class to an asset class and holds
+  the "Create asset on insert" behaviour. Creating a CI in a mapped class auto-creates the asset; creating an asset
+  with a model whose category is mapped auto-creates the CI.</li>
+<li><strong>Field synchronisation</strong> between the two runs both ways for the shared attributes: model, serial number, asset
+  tag, assigned to, location, company, department, cost center, and status.</li>
+<li><strong>Status mapping</strong>: changing the Asset <strong>State</strong> updates the CI <strong>Install status</strong> and the CI <strong>Hardware status</strong>
+  (the hardware-specific status field on hardware CIs). Asset <strong>Substate</strong> maps to the CI hardware substatus.
+  Official sample question #2 tests exactly this: State on the asset changes -&gt; Install Status and Hardware Status
+  on the CI.</li>
+<li>A CI that was <strong>created from an asset</strong> carries <code>discovery_source = SNAssetManagement</code>. A CI created by hand in
+  the UI or by a script carries <code>ServiceNow</code>. Official sample question #1: to find CIs created from assets that were
+  never discovered, report on the class where Discovery source = <code>SNAssetManagement</code> (not on an empty Last
+  discovered field, which also catches manual CIs).</li>
+<li>Governance angle: asset managers own financial attributes, configuration managers own technical ones, so
+  reconciliation rules typically give the Asset/HAM source priority on cost and ownership fields and Discovery
+  priority on technical fields.</li>
+<li>CSDM angle: assets and models sit in the <strong>Foundation</strong> domain (Product Model) and link to CIs in Service Delivery.</li>
+</ul>
+<h3 id="22-the-six-health-metrics-kpis-and-csfs">2.2 The six health metrics, KPIs and CSFs</h3>
+<ul>
+<li><strong>Six metrics</strong>: Required fields, Recommended fields (Completeness) · Duplicate, Orphan, Stale (Correctness) ·
+  Audit (Compliance). Three KPIs roll them up. Scorecards weight them. Health Preferences define them per class.</li>
+<li><strong>Critical Success Factor (CSF)</strong> = the outcome the CMDB must deliver (e.g. "accurate impact analysis for change").
+  <strong>KPI</strong> = the measurable proxy (e.g. "Correctness above 90% for principal classes"). The Health Dashboard supplies
+  the KPIs; governance defines the CSFs and target thresholds and reviews them on a cadence.</li>
+<li>Health results can be scoped by <strong>principal classes</strong>, <strong>CMDB Groups</strong>, or individual classes so KPIs are reported
+  on what matters rather than on every table.</li>
+</ul>
+<h3 id="23-non-discoverable-and-manual-cis-and-attributes">2.3 Non-discoverable and manual CIs and attributes</h3>
+<ul>
+<li>Non-discoverable CIs: Business Applications, Business Services and Offerings, Business Capabilities, contracts,
+  facilities, many OT/IoT and paper/process items. Non-discoverable attributes on discoverable CIs: owner, support
+  group, cost center, environment, business criticality, compliance tags.</li>
+<li>Populate them with: manual creation in CMDB Workspace or the form; <strong>spreadsheet/CSV import through IH-ETL</strong> (so
+  IRE still runs); Service Catalog items and Flow Designer flows that create the record with approvals; Foundation
+  data joins (assigned_to from HR, cost center from Finance); Asset records (see 2.1).</li>
+<li>Keep them current with: <strong>Attestation</strong> policies, Data Certification tasks, ownership fields with mandatory values
+  (Completeness required fields), and reconciliation rules that let the manual/HR source own those attributes so a
+  discovery source cannot blank them.</li>
+<li>Best practice statement the exam likes: manual CIs still go through IRE (use the identification rule based on
+  name + class or correlation_id), still get owners, and still get lifecycle stages.</li>
+</ul>
+<h3 id="24-auto-vs-manual-relationship-population">2.4 Auto vs manual relationship population</h3>
+<ul>
+<li><strong>Auto</strong>: Discovery hosting/containment relationships (Runs on, Hosted on, Contains), Service Mapping dependency
+  relationships, Service Graph Connectors and IH-ETL relationship mapping, tag-based and calculated Application
+  Services, Dynamic CI Group queries, suggested relationships applied by the relationship editor.</li>
+<li><strong>Manual</strong>: CI relationship editor (form related list / Dependency Views editor), Application Service manual map
+  editor, bulk import of <code>cmdb_rel_ci</code> via IH-ETL, CSDM relationships from the Business Application to the
+  Application Service and from Service Offerings down.</li>
+<li>Governance: manual relationships need an owner and a review cadence; the Correctness KPI flags orphans.</li>
+</ul>
+<h3 id="25-technical-debt-and-upgradeability">2.5 Technical debt and upgradeability</h3>
+<p>Choose in this order and you stay upgrade-safe: OOTB class (or Store class model) &gt; extend via Class Manager &gt;
+custom class in a scoped app. OOTB relationship types &gt; new type. Service Graph Connector &gt; IH-ETL &gt; scripted IRE
+call &gt; never a transform map that writes to <code>cmdb_ci</code> or direct GlideRecord inserts. No changes to base tables,
+no scripts in identification rules where a rule option exists, no bypassing IRE, keep CSDM naming. Document every
+extension through the governance board so it survives staff turnover and upgrades.</p>
+<h3 id="26-when-to-configure-cmdb-360-multisource">2.6 When to configure CMDB 360 / multisource</h3>
+<p>Turn it on when more than one source feeds the same classes and you need to audit which source said what, to
+tune precedence rules with evidence, to detect sources that stopped reporting, or to answer "why does this CI say
+X". It costs storage (per-source rows per attribute), so enable it for the classes that need it, not everything
+<em>(check the per-class scoping on your release)</em>. CMDB 360 in the Workspace is the viewer; the multisource Query
+Builder is the reporting side.</p>
+<h3 id="27-security-and-regulatory-compliance-identifiers-on-csdm-objects">2.7 Security and regulatory compliance identifiers on CSDM objects</h3>
+<ul>
+<li>Compliance requirements (PCI, SOX, HIPAA, GDPR, ISO 27001, internal data classifications) are tracked on the CSDM
+  objects that carry business meaning, not on random infrastructure CIs: <strong>Business Application</strong> (data
+  classification, business criticality, regulatory attributes), <strong>Information Object</strong> (data class), <strong>Application
+  Service</strong> (environment and criticality inherited for operations), and <strong>Business Service / Offering</strong> for
+  customer-facing commitments.</li>
+<li>Mechanisms: dedicated attributes on those classes, <strong>key-value tags</strong> (<code>cmdb_key_value</code>) when many identifiers
+  are needed, CMDB Groups to scope audits, and IRM/GRC controls and policies attached to the CSDM records. Audit
+  results feed the Compliance KPI.</li>
+<li>Why on CSDM objects: the identifier then flows down through relationships to every CI that supports the service,
+  which is what vulnerability response and change risk need.</li>
+</ul>
+<h3 id="28-why-duplicates-happen-and-the-de-duplication-wizard">2.8 Why duplicates happen and the de-duplication wizard</h3>
+<ul>
+<li>Causes: a source bypassing IRE; an identification rule that does not use the attributes the source sends;
+  sources sending different classes for the same device without "Search on table"; Allow null attribute; the same
+  device reported with different serial formats; manual creation before discovery.</li>
+<li>Detection: IRE flags multiple matches into <strong>de-duplication tasks</strong>; the Correctness KPI counts duplicates using the
+  identification rule; CMDB 360 shows which source created each copy.</li>
+<li>Remediation: the <strong>de-duplication wizard</strong> (Duplicate CI Remediator) from the Health dashboard or the de-dup task:
+  pick the <strong>master/survivor</strong> CI, choose how to merge attribute values, move relationships and references (tasks,
+  assets) to the survivor, then retire or delete the losers. Then fix the root cause (identifier or source) or they
+  come back.</li>
+</ul>
+<h3 id="29-operationalising-the-cmdb-and-the-key-roles">2.9 Operationalising the CMDB and the key roles</h3>
+<ul>
+<li>Operationalise = the CMDB is used daily by other processes and is kept healthy by routine, not heroics: health
+  jobs scheduled, Data Manager policies live, attestation cycles running, dashboards reviewed, new sources
+  onboarded through a defined path, class changes approved.</li>
+<li>Roles the blueprint lists in its audience table: <strong>CMDB Administrator</strong> (configures Class Manager, IRE, Health,
+  Data Manager), <strong>CMDB Librarian / Data Steward</strong> (day-to-day data quality, remediation tasks, attestation follow-
+  up), <strong>Configuration Manager</strong> (process owner, policies, KPIs/CSFs, governance board), <strong>CI Class Owner</strong>
+  (accountable for a class's definition and data), <strong>Platform Architect / Owner</strong> (upgradeability, integrations,
+  scoped apps), <strong>Technical Consultant / Developer</strong> (implements). Add <strong>Service Owner</strong> and <strong>Application Owner</strong>
+  from CSDM.</li>
+<li>Goals of governance: trusted data for decisions, clear accountability, controlled change to the model,
+  measurable quality, compliance evidence, lower operating cost.</li>
+</ul>
+<h3 id="210-cmdb-workspace-features-to-be-able-to-list">2.10 CMDB Workspace features to be able to list</h3>
+<p>Home health overview and KPIs · Health drill-down with remediation · Data Manager (policies, attestation and
+remediation task queues) · Query Builder (visual and Natural Language) · Class Manager · CMDB 360 · IRE
+simulation and identification inclusion rules · Data source and integration views · CI 360/record view with
+relationships and lifecycle · Data Foundations indicators (with the Store dashboard installed). Use it when the
+task is configuration-manager work; use classic lists/forms for ad-hoc admin.</p>
+<h3 id="211-principal-classes">2.11 Principal classes</h3>
+<ul>
+<li>A <strong>principal class</strong> is a CI class your organisation designates as important enough to be measured and shown
+  by default: health dashboards, the Data Foundations Dashboard and Workspace filters focus on principal classes
+  so a few thousand unimportant CIs do not drown the score.</li>
+<li>The base system ships a default list (servers, applications, databases, network gear, storage, services)
+  <em>(check the exact list)</em>; you maintain it from the CMDB Health / Workspace preferences by adding or removing
+  classes <em>(check the module name on your release)</em>.</li>
+<li>Exam pattern: "the health score is dominated by a class nobody cares about" -&gt; adjust principal classes and
+  inclusion rules, not the scorecard weights.</li>
+</ul>
+<h3 id="212-cmdb-and-csdm-data-foundations-dashboard-and-playbooks">2.12 CMDB and CSDM Data Foundations Dashboard and Playbooks</h3>
+<ul>
+<li>Store app that measures <strong>indicators</strong> across CMDB health and CSDM adoption stages (Crawl/Walk/Run/Fly), e.g.
+  Application Services without relationships, Business Applications without Application Services, principal-class
+  CIs without owners, unregistered discovery sources.</li>
+<li>Every indicator ships a <strong>Playbook</strong>, a structured guideline with a fixed outline, tested in official sample
+  question #3:
+  1. <strong>Summary of indicator</strong>
+  2. <strong>Overview of problem</strong>
+  3. <strong>Importance of addressing issue</strong>
+  4. <strong>Fix or Improve</strong></li>
+<li>Use the dashboard when you want to improve data quality with guidance and to show maturity progress to
+  leadership; use the Health Dashboard for the raw KPI scores. When the blueprint says "improve data quality using
+  the Data Foundations Dashboard", the answer is: work the indicators with their playbooks.</li>
+</ul>
+<h3 id="213-life-cycle-attributes-between-cis">2.13 Life-cycle attributes between CIs</h3>
+<ul>
+<li>Standard fields <code>life_cycle_stage</code> and <code>life_cycle_stage_status</code> are consistent across classes so lifecycle can be
+  compared and propagated. <strong>Life cycle rules</strong> per class define allowed combinations and the mapping to legacy
+  <code>install_status</code> / <code>operational_status</code> / hardware status.</li>
+<li>Between related CIs: when a host is retired, hosted or contained CIs should move with it. Data Manager policies
+  and lifecycle flows can target related CIs so dependents are retired with the parent <em>(check the exact
+  mechanism on your release)</em>; the Asset state syncs the CI status (2.1); Service Mapping can mark disappeared
+  components; orphan and stale rules catch the leftovers.</li>
+<li>Exam pattern: "server retired but its running applications still show Operational" -&gt; lifecycle governance gap,
+  fix with lifecycle rules plus a Data Manager retire policy scoped to the dependent classes.</li>
+</ul>
+<h3 id="214-business-value-of-the-cmdb-and-product-outcomes">2.14 Business value of the CMDB and product outcomes</h3>
+<table>
+<thead>
+<tr>
+<th>Consumer</th>
+<th>Outcome enabled by CMDB + CSDM data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ITSM Incident/Problem</td>
+<td>Correct impact and priority, routing to the right support group, faster MTTR through dependency maps</td>
+</tr>
+<tr>
+<td>ITSM Change</td>
+<td>Risk assessment from relationships and conflicts, blackout and maintenance windows per service, CAB evidence</td>
+</tr>
+<tr>
+<td>ITOM Event/AIOps</td>
+<td>Alert correlation to Application Services, business-impact ranking, root cause via topology</td>
+</tr>
+<tr>
+<td>Service Portfolio / Service Owner Workspace</td>
+<td>Service-level reporting, availability and cost per service offering</td>
+</tr>
+<tr>
+<td>APM</td>
+<td>Application rationalisation, capability heat maps, technology risk</td>
+</tr>
+<tr>
+<td>HAM / SAM</td>
+<td>Asset-CI reconciliation, licence compliance from discovered software, refresh planning</td>
+</tr>
+<tr>
+<td>SecOps Vulnerability Response</td>
+<td>Risk-based prioritisation by business criticality of the services a CI supports</td>
+</tr>
+<tr>
+<td>IRM / GRC</td>
+<td>Control scoping and audit evidence tied to CSDM objects</td>
+</tr>
+<tr>
+<td>CSM / FSM</td>
+<td>Installed base and entitlements linked to customer-facing services</td>
+</tr>
+<tr>
+<td>Finance / Cloud cost</td>
+<td>Cost allocation by service and cost center</td>
+</tr>
+<tr>
+<td>Value statement: one trusted source of truth that turns technical data into service and business context.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="215-natural-language-query-saved-queries-and-complex-relationship-queries">2.15 Natural Language Query, saved queries and complex relationship queries</h3>
+<ul>
+<li><strong>Natural Language Query</strong> in Query Builder (CMDB Workspace) lets you type a question such as "Windows servers
+  used by application services that support Payroll" and generates the query graph, which you then refine
+  <em>(check licensing/Now Assist dependency on your release)</em>.</li>
+<li><strong>CMDB saved queries</strong>: build once, save, run on demand or on schedule; results can be persisted so ordinary
+  <strong>reports and dashboards</strong> can be built on them, including multisource (CMDB 360) results. This is the answer to
+  "build a custom report on CMDB 360 data".</li>
+<li>Getting a <strong>full result set</strong> on complex queries: model every hop explicitly (class -&gt; relationship type -&gt;
+  class), choose the correct relationship direction, use "any relationship" or relationship levels where the type
+  varies, add filters on each node rather than only at the end, and include subclasses by querying the parent
+  class. Missing results usually mean a wrong direction or a too-specific relationship type.</li>
+</ul>
+<h3 id="216-unified-map">2.16 Unified Map</h3>
+<ul>
+<li>The <strong>Unified Map</strong> is the newer single map experience that replaces switching between Dependency Views (BSM map)
+  and the Application Service map. Components to name: the canvas with the focus CI, upstream/downstream levels
+  with configurable depth, relationship-type and class filters, the legend, the CI details side panel, saved views
+  or perspectives, and the ability to open impact for Incident/Change and to edit relationships <em>(check exact
+  labels)</em>.</li>
+<li>Use it for impact analysis, root cause, validating CSDM linkage (offering -&gt; application service -&gt; infra), and
+  as the visual check after Service Mapping.</li>
+</ul>
+<h3 id="217-csdm-with-stakeholders-across-industries">2.17 CSDM with stakeholders across industries</h3>
+<ul>
+<li>Mapping discipline: ask each stakeholder what they own and consume. Enterprise architects own <strong>Business
+  Capabilities</strong> and <strong>Business Applications</strong> (Design &amp; Planning). Application and infrastructure teams own
+  <strong>Application Services</strong> and <strong>Technical Services/Offerings</strong> (Service Delivery). Business relationship and service
+  managers own <strong>Business Services/Offerings</strong> (Service Consumption). Finance and HR own <strong>Foundation</strong> data.
+  Strategy/portfolio offices own <strong>Ideation &amp; Strategy</strong> and <strong>Manage Portfolios</strong>.</li>
+<li>Industry examples: a hospital's "Patient Admission" is a Business Service, "Epic - PROD" an Application Service,
+  "Epic" the Business Application, "Clinical Systems Hosting" a Technical Service. A bank's "Card Payments" is a
+  Business Service with offerings per card type; "PCI scope" is a compliance identifier on the Business Application
+  and Information Objects. A manufacturer's PLC line is an OT CI under Service Delivery supporting a "Line 3
+  Production" Business Service.</li>
+<li>Benefits to state: consistent reporting across products, faster impact analysis, less rework when new products
+  are adopted, clear ownership, portfolio and cost transparency, upgrade-safe because it uses OOTB tables.</li>
+</ul>
+<h2 id="3-official-sample-questions-from-the-blueprint">3. Official sample questions (from the blueprint)</h2>
+<p><strong>1.</strong> The Configuration Management team wants to identify which CIs have been created from an asset but have not
+been discovered. They create a report on the target CI class. How do they identify these CIs?
+A. All CIs with a Discovery source value of <code>SNAssetManagement</code> · B. All CIs with Updated older than a month ·
+C. All CIs where Last Discovered is empty · D. All CIs with a Discovery source value of <code>ServiceNow</code>
+<strong>Answer: A.</strong></p>
+<p><strong>2.</strong> A State field is updated on an Asset record. Which fields are automatically synchronised on the associated CI
+record? (Choose two)
+A. Operational status · B. Install Status · C. Hardware Status · D. Asset tag
+<strong>Answer: B, C.</strong></p>
+<p><strong>3.</strong> Put the structure of a Data Foundations Dashboard Playbook in order.
+<strong>Answer: Summary of indicator -&gt; Overview of problem -&gt; Importance of addressing issue -&gt; Fix or Improve.</strong></p>
+<h2 id="4-drag-and-drop-practice-no-partial-credit-on-the-real-exam">4. Drag-and-drop practice (no partial credit on the real exam)</h2>
+<p>Match each need to the tool. One tool is used twice, one is not used.</p>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th></th>
+<th>Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Compare what SCCM and Discovery reported for one server</td>
+<td></td>
+<td>A. CMDB Data Manager</td>
+</tr>
+<tr>
+<td>2. Ask owners yearly whether their CIs still exist</td>
+<td></td>
+<td>B. CMDB 360</td>
+</tr>
+<tr>
+<td>3. Report CSDM maturity to the CIO with guided fixes</td>
+<td></td>
+<td>C. Data Foundations Dashboard</td>
+</tr>
+<tr>
+<td>4. Retire CIs not updated in 180 days</td>
+<td></td>
+<td>D. CI Class Manager</td>
+</tr>
+<tr>
+<td>5. Add an attribute to Linux servers only</td>
+<td></td>
+<td>E. Query Builder</td>
+</tr>
+</tbody>
+</table>
+<p>Answer: 1-B, 2-A, 3-C, 4-A, 5-D (E unused).</p>
+<p>Match each metric to its KPI.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th></th>
+<th>KPI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Orphan</td>
+<td></td>
+<td>A. Completeness</td>
+</tr>
+<tr>
+<td>2. Recommended field</td>
+<td></td>
+<td>B. Correctness</td>
+</tr>
+<tr>
+<td>3. Audit</td>
+<td></td>
+<td>C. Compliance</td>
+</tr>
+<tr>
+<td>4. Stale</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>5. Required field</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>6. Duplicate</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Answer: 1-B, 2-A, 3-C, 4-B, 5-A, 6-B.</p>
+<p>Match the CSDM 4 domain to its CSDM 5 name.</p>
+<table>
+<thead>
+<tr>
+<th>CSDM 4</th>
+<th></th>
+<th>CSDM 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Design</td>
+<td></td>
+<td>A. Service Consumption</td>
+</tr>
+<tr>
+<td>2. Manage Technical Services</td>
+<td></td>
+<td>B. Build &amp; Integration</td>
+</tr>
+<tr>
+<td>3. Sell/Consume</td>
+<td></td>
+<td>C. Design &amp; Planning</td>
+</tr>
+<tr>
+<td>4. Build</td>
+<td></td>
+<td>D. Service Delivery</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>E. Ideation &amp; Strategy</td>
+</tr>
+</tbody>
+</table>
+<p>Answer: 1-C, 2-D, 3-A, 4-B (E is new in CSDM 5, no CSDM 4 equivalent).</p></article>
+</section>
+
+<section class="view" data-view="traps">
+  <div class="eyebrow">06 · Traps</div>
+  <h1>Read the night before</h1>
+  <p class="lead">A "which tool" decision table, confusable pairs, and the engine behaviours to know cold.</p>
+  <article class="prose"><h2 id="which-tool-decision-table">"Which tool?" decision table</h2>
+<table>
+<thead>
+<tr>
+<th>You need to...</th>
+<th>Use</th>
+<th>Not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add an attribute, see the class tree, set identification/reconciliation for a class</td>
+<td><strong>CI Class Manager</strong></td>
+<td>Data Manager, System Definition &gt; Tables</td>
+</tr>
+<tr>
+<td>Retire/archive/delete CIs on a schedule, or ask owners to attest</td>
+<td><strong>CMDB Data Manager</strong></td>
+<td>Health remediation flows, scheduled scripts</td>
+</tr>
+<tr>
+<td>See Completeness / Correctness / Compliance scores</td>
+<td><strong>CMDB Health Dashboard</strong></td>
+<td>Data Foundations Dashboard</td>
+</tr>
+<tr>
+<td>Measure CSDM maturity / adoption</td>
+<td><strong>CSDM Data Foundations Dashboard</strong> (Store)</td>
+<td>CMDB Health Dashboard</td>
+</tr>
+<tr>
+<td>Compare what SCCM vs Discovery reported for one CI</td>
+<td><strong>CMDB 360</strong> (requires Multisource CMDB)</td>
+<td>Dependency Views, Query Builder</td>
+</tr>
+<tr>
+<td>List CIs across classes via relationships (servers under a business service)</td>
+<td><strong>CMDB Query Builder</strong></td>
+<td>Report designer, list filters</td>
+</tr>
+<tr>
+<td>Show upstream/downstream impact of a CI</td>
+<td><strong>Dependency Views / Application Service map</strong></td>
+<td>Query Builder</td>
+</tr>
+<tr>
+<td>Test whether a payload would match an existing CI</td>
+<td><strong>Identification simulation / identifyCI</strong></td>
+<td>createOrUpdateCI on production</td>
+</tr>
+<tr>
+<td>Load data from a vendor tool that has a Store connector</td>
+<td><strong>Service Graph Connector</strong></td>
+<td>IH-ETL, import set</td>
+</tr>
+<tr>
+<td>Load data from a source with no connector</td>
+<td><strong>IntegrationHub ETL (RTE)</strong></td>
+<td>classic transform map</td>
+</tr>
+<tr>
+<td>Let a second source update after the first goes silent</td>
+<td><strong>Data refresh rule</strong></td>
+<td>Reconciliation rule, staleness rule</td>
+</tr>
+<tr>
+<td>Stop a source from overwriting owner fields</td>
+<td><strong>Reconciliation rule</strong> (+ precedence)</td>
+<td>Data refresh rule</td>
+</tr>
+<tr>
+<td>Merge duplicates found by health</td>
+<td><strong>Duplicate CI Remediator / de-dup tasks</strong></td>
+<td>Delete policy</td>
+</tr>
+<tr>
+<td>Group CIs for health slicing or change scoping</td>
+<td><strong>CMDB Group</strong> (from Query Builder query)</td>
+<td>Dynamic CI Group</td>
+</tr>
+<tr>
+<td>Represent infrastructure under a Technical Service Offering</td>
+<td><strong>Dynamic CI Group</strong></td>
+<td>CMDB Group</td>
+</tr>
+</tbody>
+</table>
+<h2 id="confusable-pairs">Confusable pairs</h2>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>The difference in one line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business Application</td>
+<td>Application Service</td>
+<td>Portfolio record you own vs running instance with infrastructure map. Outages go on the Application Service.</td>
+</tr>
+<tr>
+<td>Business Service</td>
+<td>Technical (Technology Management) Service</td>
+<td>Consumed by the business vs provided by IT to IT.</td>
+</tr>
+<tr>
+<td>Service Offering</td>
+<td>Service</td>
+<td>Offering = level/variant with commitments; linked to its Service by the <code>parent</code> reference, not a relationship.</td>
+</tr>
+<tr>
+<td>Dynamic CI Group</td>
+<td>CMDB Group</td>
+<td>CSDM construct under Technical Service Offerings vs governance/health grouping tool.</td>
+</tr>
+<tr>
+<td>Product Model</td>
+<td>CI</td>
+<td>Catalogue definition vs the instance in your estate. Model is Foundation data, not a CI class.</td>
+</tr>
+<tr>
+<td>Identification rule</td>
+<td>Reconciliation rule</td>
+<td>Is it the same CI? vs Who may update which field?</td>
+</tr>
+<tr>
+<td>Data source precedence</td>
+<td>Data refresh rule</td>
+<td>Who wins now vs when a loser may win after silence.</td>
+</tr>
+<tr>
+<td>Independent identifier</td>
+<td>Dependent identifier</td>
+<td>Stands alone vs needs parent CI + relationship in the payload.</td>
+</tr>
+<tr>
+<td>Orphan</td>
+<td>Stale</td>
+<td>No relationships vs not updated in N days.</td>
+</tr>
+<tr>
+<td>Required field (Completeness)</td>
+<td>Required relationship (Correctness)</td>
+<td>Attribute missing vs relationship missing.</td>
+</tr>
+<tr>
+<td>Attestation (Data Manager)</td>
+<td>Data Certification</td>
+<td>Owner confirms CI is still right vs field-by-field record verification tasks.</td>
+</tr>
+<tr>
+<td>Compliance KPI</td>
+<td>Correctness KPI</td>
+<td>Audit against desired state vs duplicates/orphans/stale.</td>
+</tr>
+<tr>
+<td>CMDB Health Dashboard</td>
+<td>CSDM Data Foundations Dashboard</td>
+<td>Data quality vs CSDM adoption maturity.</td>
+</tr>
+<tr>
+<td>Health Preferences</td>
+<td>Scorecards</td>
+<td>What is measured per class vs how much each measure weighs.</td>
+</tr>
+<tr>
+<td>Import Set transform map</td>
+<td>IntegrationHub ETL</td>
+<td>Bypasses IRE by default vs calls IRE by design.</td>
+</tr>
+<tr>
+<td>Service Graph Connector</td>
+<td>IntegrationHub ETL</td>
+<td>Certified prebuilt (built on IH-ETL) vs build-your-own.</td>
+</tr>
+<tr>
+<td>Horizontal Discovery</td>
+<td>Service Mapping</td>
+<td>Infrastructure inventory bottom-up vs Application Service maps top-down from an entry point.</td>
+</tr>
+<tr>
+<td><code>cmdb_ci_service</code></td>
+<td><code>cmdb_ci_service_business</code> / <code>_technical</code> / <code>_auto</code></td>
+<td>Legacy parent you should not populate vs the CSDM classes.</td>
+</tr>
+<tr>
+<td>life_cycle_stage</td>
+<td>install_status</td>
+<td>New standard lifecycle vs legacy status. Data Manager policies need active lifecycle rules.</td>
+</tr>
+<tr>
+<td>CSDM 4 "Manage Technical Services"</td>
+<td>CSDM 5 "Service Delivery"</td>
+<td>Same domain, renamed. Sell/Consume -&gt; Service Consumption. Design -&gt; Design &amp; Planning. Build -&gt; Build &amp; Integration.</td>
+</tr>
+<tr>
+<td>Crawl</td>
+<td>Walk</td>
+<td>Application Service + foundation vs Technical Services/Offerings + Dynamic CI Groups + Capabilities.</td>
+</tr>
+<tr>
+<td>Run</td>
+<td>Fly</td>
+<td>Business Services/Offerings + portfolio vs everything strategic (processes, information objects, DevOps, ideation).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="behaviours-to-remember-cold">Behaviours to remember cold</h2>
+<ul>
+<li>IRE: entries in priority order, first match wins, no match = insert, multiple matches = de-dup task (not a guess).</li>
+<li>Dependent CI payload without its parent and relationship = IRE error, nothing inserted.</li>
+<li>Unregistered discovery source in a payload = rejected.</li>
+<li>Lower precedence number = higher authority.</li>
+<li>Health jobs are off by default. Health uses the class identification rule to find duplicates.</li>
+<li>Retire/Archive/Delete policies need an active life-cycle rule for every class in scope.</li>
+<li>Multisource is off by default; CMDB 360 is empty without it.</li>
+<li>Service Offering -&gt; Service is a reference; Application Service -&gt; infrastructure is a relationship.</li>
+<li>Business Application never gets infrastructure relationships.</li>
+<li>Govern is 35% of the exam. When in doubt on a governance question, pick the answer with owners, policies and
+  a review cadence over the answer with a script.</li>
+</ul></article>
+</section>
+
+<section class="view" data-view="cards">
+  <div class="eyebrow">02 · Flashcards</div>
+  <h1>Terminology drill</h1>
+  <p class="lead">Tap the card to flip. Mark it known or not; "unknown only" narrows to what still needs work. Space flips, arrow keys move.</p>
+  <div class="cardbar">
+    <select id="card-block"><option value="all">All blocks</option></select>
+    <label><input type="checkbox" id="card-unknown"> Unknown only</label>
+    <button class="btn sm" id="card-shuffle">Shuffle</button>
+    <button class="btn sm ghost" id="card-reset">Reset marks</button>
+  </div>
+  <div class="card" id="card" tabindex="0" role="button" aria-label="Flashcard, press to flip"></div>
+  <div class="cardacts">
+    <button class="btn sm ghost" id="card-prev">← Previous</button>
+    <button class="btn ok" id="card-know">Knew it</button>
+    <button class="btn bad" id="card-dont">Not yet</button>
+    <button class="btn sm ghost" id="card-next">Next →</button>
+    <span class="n" id="card-n"></span>
+  </div>
+</section>
+
+<section class="view" data-view="tests">
+  <div class="eyebrow">03 · Tests</div>
+  <h1>Self-grading tests</h1>
+  <p class="lead">Answer, then check. Explanations appear after each check, scores roll up by domain. Time-box: 35 minutes for the diagnostic, 50 for the mock.</p>
+  <div class="tabs" role="tablist" id="test-tabs"></div>
+  <div class="summary" id="test-summary"></div>
+  <div id="test-body"></div>
+</section>
+
+<section class="view" data-view="bank">
+  <div class="eyebrow">07 · Practice bank</div>
+  <h1>386 questions with explanations</h1>
+  <p class="lead">Your uploaded bank, interface translated to English. It opens in a new tab and keeps its own progress in this browser.</p>
+  <div class="bank">
+    <div class="panel">
+      <h3>How to use it</h3>
+      <p><a class="btn primary" href="07-practice-bank-386-questions.html" target="_blank" rel="noopener">Open the practice bank</a></p>
+      <ol>
+        <li>Friday: Quiz 1 and Quiz 2 in <b>All questions</b>. Read every explanation, including the ones you got right.</li>
+        <li>Saturday: Quiz 3, 4 and 5. Then the <b>Review mode</b> tab, which collects your misses, until the pool is empty.</li>
+        <li>Use the <b>Drag-and-drop</b> type filter once: the real exam has this format with no partial credit.</li>
+        <li>Thirteen questions carry a <b>Corrected</b> badge: the bank's author overrode the original key. Treat those with care.</li>
+        <li>Submit each attempt with the ✓ button so the Statistics panel shows your trend.</li>
+      </ol>
+      <p style="color:var(--muted);font-size:13px">The bank was built by a third party; it is practice, not the official item pool.</p>
+    </div>
+    <div class="panel">
+      <h3>Where the bank is thin</h3>
+      <p style="font-size:13px;color:var(--muted)">Questions in the bank mentioning each blueprint topic. Low counts are covered in the addendum instead.</p>
+      <div class="cov">
+        <span>Unified Map</span><span class="n">33</span>
+        <span>Data Foundations Dashboard</span><span class="n">23</span>
+        <span>CMDB 360 / multisource</span><span class="n">21</span>
+        <span>Playbooks</span><span class="n">18</span>
+        <span>Service Graph Connectors</span><span class="n">18</span>
+        <span>Attestation</span><span class="n">14</span>
+        <span>De-duplication</span><span class="n">12</span>
+        <span>Principal classes</span><span class="n">10</span>
+        <span>Non-discoverable CIs</span><span class="n">10</span>
+        <span class="lo">Natural Language Query</span><span class="n lo">4</span>
+        <span class="lo">Business value of the CMDB</span><span class="n lo">3</span>
+        <span class="lo">Asset-CI synchronisation</span><span class="n lo">1</span>
+        <span class="lo">Hardware status sync</span><span class="n lo">0</span>
+      </div>
+      <p style="margin-top:12px;font-size:13px">Read addendum sections <a href="#addendum">2.1, 2.14 and 2.15</a> to cover the bottom four; two of the three official sample questions are on asset-CI sync.</p>
+    </div>
+  </div>
+</section>
+
+<section class="view" data-view="labs">
+  <div class="eyebrow">05 · PDI labs</div>
+  <h1>Hands-on checklist</h1>
+  <p class="lead">Sixty to ninety minutes in a Personal Developer Instance. The goal is to have seen each screen the exam names, not to build anything.</p>
+  <div id="labs"></div>
+</section>
+
+</main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DATA = {"tests": [{"id": "diag", "title": "Diagnostic quiz", "minutes": 35, "questions": [{"n": 1, "domain": "Configuration", "q": "Which table stores the relationships between two CIs?", "opts": [{"l": "A", "t": "<code>cmdb_rel_type<\/code>"}, {"l": "B", "t": "<code>cmdb_rel_ci<\/code>"}, {"l": "C", "t": "<code>cmdb_ci_rel<\/code>"}, {"l": "D", "t": "<code>cmdb_relationship<\/code>"}], "multi": false, "ans": ["B"], "why": "<code>cmdb_rel_ci<\/code> holds parent, child, type. <code>cmdb_rel_type<\/code> holds the type definitions."}, {"n": 2, "domain": "Configuration", "q": "A customer needs a CI class for an in-house application component that runs on servers. What is the best\napproach?", "opts": [{"l": "A", "t": "Create a new table directly under <code>cmdb_ci<\/code> in System Definition &gt; Tables"}, {"l": "B", "t": "Use CI Class Manager to create a class that extends <code>cmdb_ci_appl<\/code>"}, {"l": "C", "t": "Add the component's fields to <code>cmdb_ci<\/code>"}, {"l": "D", "t": "Store the components as records in <code>cmdb_ci_service<\/code>"}], "multi": false, "ans": ["B"], "why": "Extend the most specific fitting class through Class Manager so identification, health and suggested relationships are inherited and registered."}, {"n": 3, "domain": "Configuration", "q": "An Application Service is the parent and a Linux server is the child in a <code>Depends on::Used by<\/code> relationship.\nWhich statement is true?", "opts": [{"l": "A", "t": "The server depends on the Application Service"}, {"l": "B", "t": "The Application Service depends on the server, and the server is used by the Application Service"}, {"l": "C", "t": "That relationship type is invalid for services"}, {"l": "D", "t": "Direction has no meaning in <code>cmdb_rel_ci<\/code>"}], "multi": false, "ans": ["B"], "why": "In <code>Parent::Child<\/code> naming, the parent side descriptor applies to the parent record."}, {"n": 4, "domain": "Configuration", "q": "Which two items are configured in CI Class Manager? (Choose 2)", "opts": [{"l": "A", "t": "Identification rules"}, {"l": "B", "t": "Data Manager policies"}, {"l": "C", "t": "Suggested relationships"}, {"l": "D", "t": "The health score calculation schedule"}], "multi": true, "ans": ["A", "C"], "why": "Class Manager: attributes, identification/reconciliation rules, health preferences, suggested and dependent relationships. Policies live in Data Manager; health jobs are scheduled jobs."}, {"n": 5, "domain": "Configuration", "q": "How is a CI linked to its Product Model?", "opts": [{"l": "A", "t": "A <code>cmdb_rel_ci<\/code> relationship"}, {"l": "B", "t": "The <code>model_id<\/code> reference field on the CI"}, {"l": "C", "t": "Only through the model category"}, {"l": "D", "t": "Product Models are CIs that extend <code>cmdb_ci<\/code>"}], "multi": false, "ans": ["B"], "why": "Model is Foundation data referenced by <code>model_id<\/code>; it is not a CI and not a relationship."}, {"n": 6, "domain": "Ingest", "q": "During identification, an identifier entry matches two existing CIs. What does IRE do?", "opts": [{"l": "A", "t": "Creates a new CI"}, {"l": "B", "t": "Updates both CIs"}, {"l": "C", "t": "Creates a de-duplication task and does not create a new CI"}, {"l": "D", "t": "Deletes the older CI"}], "multi": false, "ans": ["C"], "why": "IRE never guesses between multiple matches; it raises a de-duplication task for remediation."}, {"n": 7, "domain": "Ingest", "q": "A payload contains a Network Adapter but no host computer and no relationship. What happens?", "opts": [{"l": "A", "t": "It is inserted as an independent CI"}, {"l": "B", "t": "IRE returns an error and the adapter is not inserted, because the class uses dependent identification"}, {"l": "C", "t": "It is inserted under a generic placeholder parent"}, {"l": "D", "t": "It is held in a staging table for review"}], "multi": false, "ans": ["B"], "why": "Dependent classes need the parent CI and the relationship in the same payload."}, {"n": 8, "domain": "Ingest", "q": "SCCM should be allowed to update a server's attributes only if Discovery has not updated them for 30 days.\nWhat do you configure?", "opts": [{"l": "A", "t": "A reconciliation rule"}, {"l": "B", "t": "A data refresh rule"}, {"l": "C", "t": "A CMDB Health staleness rule"}, {"l": "D", "t": "An identification inclusion rule"}], "multi": false, "ans": ["B"], "why": "Data refresh rules let a lower-priority source overwrite after the higher-priority source has been silent for N days. Reconciliation rules only say who may write; precedence says who wins now."}, {"n": 9, "domain": "Ingest", "q": "A vendor tool has a ServiceNow Store integration available. Which ingestion method should be chosen first?", "opts": [{"l": "A", "t": "A custom Import Set transform map"}, {"l": "B", "t": "IntegrationHub ETL"}, {"l": "C", "t": "The Service Graph Connector"}, {"l": "D", "t": "A scripted GlideRecord insert"}], "multi": false, "ans": ["C"], "why": "Order of preference: native Discovery/Service Mapping, then Service Graph Connector, then IH-ETL, then scripted IRE, never direct writes."}, {"n": 10, "domain": "Ingest", "q": "Data source precedence for an attribute is Discovery = 100, SCCM = 200, Manual = 300. All three provide a\nvalue. Whose value remains on the CI?", "opts": [{"l": "A", "t": "Manual (300)"}, {"l": "B", "t": "SCCM (200)"}, {"l": "C", "t": "Discovery (100)"}, {"l": "D", "t": "Whichever wrote last"}], "multi": false, "ans": ["C"], "why": "Lower precedence number = higher authority."}, {"n": 11, "domain": "Ingest", "q": "Which two statements about Multisource CMDB are true? (Choose 2)", "opts": [{"l": "A", "t": "It is enabled by default"}, {"l": "B", "t": "It stores the value each source reported for each attribute"}, {"l": "C", "t": "It is required for CMDB 360 to show data"}, {"l": "D", "t": "It replaces reconciliation rules"}], "multi": true, "ans": ["B", "C"], "why": "Multisource is off by default and complements, not replaces, reconciliation."}, {"n": 12, "domain": "Govern", "q": "Which three are CMDB Health KPIs? (Choose 3)", "opts": [{"l": "A", "t": "Completeness"}, {"l": "B", "t": "Consistency"}, {"l": "C", "t": "Correctness"}, {"l": "D", "t": "Compliance"}, {"l": "E", "t": "Coverage"}], "multi": true, "ans": ["A", "C", "D"], "why": "Completeness, Correctness, Compliance."}, {"n": 13, "domain": "Govern", "q": "An orphan CI is a CI that...", "opts": [{"l": "A", "t": "has no owner"}, {"l": "B", "t": "has no relationships to other CIs"}, {"l": "C", "t": "has not been updated in 30 days"}, {"l": "D", "t": "has a duplicate"}], "multi": false, "ans": ["B"], "why": "Orphan = no relationships (per orphan rule). No owner is a Completeness (required field) problem."}, {"n": 14, "domain": "Govern", "q": "Which three are CMDB Data Manager policy types? (Choose 3)", "opts": [{"l": "A", "t": "Retire"}, {"l": "B", "t": "Reconcile"}, {"l": "C", "t": "Archive"}, {"l": "D", "t": "Attestation"}, {"l": "E", "t": "Discover"}], "multi": true, "ans": ["A", "C", "D"], "why": "Types: Retire, Archive, Delete, Attestation, Delete CMDB related entry."}, {"n": 15, "domain": "Govern", "q": "A Data Manager Retire policy cannot run. What is the most likely cause?", "opts": [{"l": "A", "t": "No reconciliation rule exists for the class"}, {"l": "B", "t": "No active life-cycle rule exists for a class in the policy's scope"}, {"l": "C", "t": "Multisource CMDB is disabled"}, {"l": "D", "t": "Health jobs are disabled"}], "multi": false, "ans": ["B"], "why": "Retire/Archive/Delete policies require an active life-cycle rule for every class in scope."}, {"n": 16, "domain": "Govern", "q": "The Completeness KPI measures...", "opts": [{"l": "A", "t": "whether required and recommended fields are populated"}, {"l": "B", "t": "whether relationships exist"}, {"l": "C", "t": "whether audits passed"}, {"l": "D", "t": "how many data sources update the CI"}], "multi": false, "ans": ["A"], "why": "Required + recommended fields."}, {"n": 17, "domain": "Govern", "q": "The Health Dashboard reports zero duplicates for a class you know contains duplicates. Most likely reason?", "opts": [{"l": "A", "t": "Health jobs run too often"}, {"l": "B", "t": "The class identification rule is weak or does not use attributes the sources populate"}, {"l": "C", "t": "Scorecard weights are too low"}, {"l": "D", "t": "The inclusion rule includes all CIs"}], "multi": false, "ans": ["B"], "why": "Duplicate detection reuses the identification rule. Fix the identifier, then re-run health."}, {"n": 18, "domain": "Govern", "q": "According to governance best practice, who approves adding a new CI class or onboarding a new data source?", "opts": [{"l": "A", "t": "The service desk manager"}, {"l": "B", "t": "The Configuration Control Board / CMDB governance board"}, {"l": "C", "t": "ServiceNow Support"}, {"l": "D", "t": "Any administrator"}], "multi": false, "ans": ["B"], "why": "The governance board / CCB approves model and source changes; admins execute."}, {"n": 19, "domain": "Govern", "q": "After a fresh implementation the Health Dashboard shows no scores. What do you check first?", "opts": [{"l": "A", "t": "Multisource settings"}, {"l": "B", "t": "That the health scheduled jobs are active, since they are disabled out of the box"}, {"l": "C", "t": "The Query Builder role"}, {"l": "D", "t": "Life-cycle rules"}], "multi": false, "ans": ["B"], "why": "Health score calculation jobs are inactive OOTB."}, {"n": 20, "domain": "Govern", "q": "Which feature periodically asks CI owners to confirm their CI data is still correct?", "opts": [{"l": "A", "t": "A data refresh rule"}, {"l": "B", "t": "An Attestation policy in CMDB Data Manager"}, {"l": "C", "t": "A reconciliation rule"}, {"l": "D", "t": "Suggested relationships"}], "multi": false, "ans": ["B"], "why": "Attestation policy creates owner tasks. Data Certification is the older field-by-field feature."}, {"n": 21, "domain": "Govern", "q": "Which two are configured per class in CMDB Health Preferences? (Choose 2)", "opts": [{"l": "A", "t": "Required and recommended fields"}, {"l": "B", "t": "Identifier entries"}, {"l": "C", "t": "Staleness and orphan rules"}, {"l": "D", "t": "Data source precedence"}], "multi": true, "ans": ["A", "C"], "why": "Health Preferences: inclusion rules, required/recommended fields, orphan and staleness rules. Identifier entries and precedence are IRE settings in Class Manager."}, {"n": 22, "domain": "Insight", "q": "You need every Windows server that supports the Business Service \"Payroll\" through its Application Services,\nacross several relationship hops. Which tool?", "opts": [{"l": "A", "t": "A report on <code>cmdb_ci_win_server<\/code>"}, {"l": "B", "t": "CMDB Query Builder"}, {"l": "C", "t": "CMDB Health Dashboard"}, {"l": "D", "t": "CMDB Data Manager"}], "multi": false, "ans": ["B"], "why": "Query Builder traverses classes through relationships; reports cannot walk multiple hops."}, {"n": 23, "domain": "Insight", "q": "You need to see what each integration reported for the same attribute of one CI. Which tool?", "opts": [{"l": "A", "t": "CMDB 360"}, {"l": "B", "t": "Dependency Views"}, {"l": "C", "t": "CI Class Manager"}, {"l": "D", "t": "Audit"}], "multi": false, "ans": ["A"], "why": "CMDB 360 = per-source attribute comparison (needs Multisource)."}, {"n": 24, "domain": "Insight", "q": "Leadership wants to track progress through the CSDM maturity stages. Which tool?", "opts": [{"l": "A", "t": "CMDB Health Dashboard"}, {"l": "B", "t": "CSDM Data Foundations Dashboard"}, {"l": "C", "t": "CI Class Manager"}, {"l": "D", "t": "Incident Performance Analytics"}], "multi": false, "ans": ["B"], "why": "CSDM Data Foundations Dashboard = adoption/maturity. Health Dashboard = data quality."}, {"n": 25, "domain": "Insight", "q": "Which is the modern workspace that brings together health, Data Manager, Query Builder, Class Manager and\nCMDB 360?", "opts": [{"l": "A", "t": "CMDB Dashboard"}, {"l": "B", "t": "CMDB Workspace"}, {"l": "C", "t": "Service Operations Workspace"}, {"l": "D", "t": "Service Portfolio Workspace"}], "multi": false, "ans": ["B"], "why": "CMDB Workspace."}, {"n": 26, "domain": "CSDM", "q": "Which record represents the deployed, running instance of an application that incidents should reference for\nimpact?", "opts": [{"l": "A", "t": "Business Application"}, {"l": "B", "t": "Application Service"}, {"l": "C", "t": "Business Service"}, {"l": "D", "t": "Product Model"}], "multi": false, "ans": ["B"], "why": "Application Service = running instance with an infrastructure map; the operational CI."}, {"n": 27, "domain": "CSDM", "q": "Which CSDM 5 domain contains Business Application and Business Capability?", "opts": [{"l": "A", "t": "Foundation"}, {"l": "B", "t": "Design &amp; Planning"}, {"l": "C", "t": "Service Delivery"}, {"l": "D", "t": "Service Consumption"}], "multi": false, "ans": ["B"], "why": "Design &amp; Planning (CSDM 4: Design)."}, {"n": 28, "domain": "CSDM", "q": "In CSDM 5, the CSDM 4 domain \"Manage Technical Services\" is renamed to...", "opts": [{"l": "A", "t": "Build &amp; Integration"}, {"l": "B", "t": "Service Delivery"}, {"l": "C", "t": "Service Consumption"}, {"l": "D", "t": "Ideation &amp; Strategy"}], "multi": false, "ans": ["B"], "why": "Manage Technical Services -&gt; Service Delivery; Sell/Consume -&gt; Service Consumption."}, {"n": 29, "domain": "CSDM", "q": "Which two belong to the Foundation domain? (Choose 2)", "opts": [{"l": "A", "t": "Product Model"}, {"l": "B", "t": "Application Service"}, {"l": "C", "t": "Location"}, {"l": "D", "t": "Business Service Offering"}], "multi": true, "ans": ["A", "C"], "why": "Foundation = Product Model, Location, Company, Department, Group, User, etc."}, {"n": 30, "domain": "CSDM", "q": "Which maturity stage typically introduces Business Services and Business Service Offerings?", "opts": [{"l": "A", "t": "Crawl"}, {"l": "B", "t": "Walk"}, {"l": "C", "t": "Run"}, {"l": "D", "t": "Fly"}], "multi": false, "ans": ["C"], "why": "Run adds the consumer side: Business Services and Offerings, Service Portfolio, catalog links."}]}, {"id": "mock", "title": "Mock exam A", "minutes": 50, "questions": [{"n": 1, "domain": "Configuration", "q": "A customer wants to track a \"patch cycle window\" value for servers only, not for all hardware. Where should the\nattribute be added?", "opts": [{"l": "A", "t": "<code>cmdb_ci<\/code>"}, {"l": "B", "t": "<code>cmdb_ci_hardware<\/code>"}, {"l": "C", "t": "<code>cmdb_ci_server<\/code>, via CI Class Manager"}, {"l": "D", "t": "A new standalone table"}], "multi": false, "ans": ["C"], "why": "Add attributes at the most specific class that needs them, through Class Manager."}, {"n": 2, "domain": "Configuration", "q": "What is the naming convention for relationship types?", "opts": [{"l": "A", "t": "<code>Child::Parent<\/code>"}, {"l": "B", "t": "<code>Parent descriptor::Child descriptor<\/code>"}, {"l": "C", "t": "<code>Type-Name<\/code>"}, {"l": "D", "t": "<code>Source-&gt;Target<\/code>"}], "multi": false, "ans": ["B"], "why": "e.g. <code>Depends on::Used by<\/code>, <code>Hosted on::Hosts<\/code>."}, {"n": 3, "domain": "Configuration", "q": "What links a CI class to an asset class so that asset-CI synchronisation works?", "opts": [{"l": "A", "t": "Model category"}, {"l": "B", "t": "Suggested relationship"}, {"l": "C", "t": "Reconciliation rule"}, {"l": "D", "t": "CMDB Group"}], "multi": false, "ans": ["A"], "why": "Model categories map CI classes to asset classes."}, {"n": 4, "domain": "Configuration", "q": "Which two statements about CMDB class extension are true? (Choose 2)", "opts": [{"l": "A", "t": "A child class inherits all fields of its parent classes"}, {"l": "B", "t": "A record is duplicated into each ancestor table"}, {"l": "C", "t": "A record is stored once, with <code>sys_class_name<\/code> set to its most specific class"}, {"l": "D", "t": "Custom classes cannot extend base-system classes"}], "multi": true, "ans": ["A", "C"], "why": "Table-per-class: inherited columns, one record, <code>sys_class_name<\/code> = most specific class. Custom classes can and should extend OOTB classes."}, {"n": 5, "domain": "Configuration", "q": "Before creating a custom class for a vendor product, what should you do first?", "opts": [{"l": "A", "t": "Check the existing hierarchy and the CMDB CI Class Models Store app for a suitable class"}, {"l": "B", "t": "Create a <code>u_<\/code> table in System Definition"}, {"l": "C", "t": "Extend <code>cmdb_ci<\/code> directly"}, {"l": "D", "t": "Add the product to <code>cmdb_ci_service<\/code>"}], "multi": false, "ans": ["A"], "why": "Reuse before build."}, {"n": 6, "domain": "Configuration", "q": "Which CI field records which integration or discovery source last updated the record?", "opts": [{"l": "A", "t": "<code>correlation_id<\/code>"}, {"l": "B", "t": "<code>discovery_source<\/code>"}, {"l": "C", "t": "<code>sys_updated_by<\/code>"}, {"l": "D", "t": "<code>source_id<\/code>"}], "multi": false, "ans": ["B"], "why": "<code>discovery_source<\/code>; <code>correlation_id<\/code> is an external key, useful as an identifier attribute."}, {"n": 7, "domain": "Ingest", "q": "A server class identification rule has entry 1 = serial number and entry 2 = name. A payload's serial matches CI\nX and its name matches a different CI Y. What happens?", "opts": [{"l": "A", "t": "CI X is updated; entry 2 is never evaluated because entry 1 matched"}, {"l": "B", "t": "A de-duplication task is created for X and Y"}, {"l": "C", "t": "A new CI is created"}, {"l": "D", "t": "CI Y is updated"}], "multi": false, "ans": ["A"], "why": "Entries are evaluated in priority order and stop at the first match."}, {"n": 8, "domain": "Ingest", "q": "Which identifier entry option can cause false matches when a source sends empty attribute values?", "opts": [{"l": "A", "t": "Enforce exact count match"}, {"l": "B", "t": "Allow null attribute"}, {"l": "C", "t": "Active"}, {"l": "D", "t": "Search on table"}], "multi": false, "ans": ["B"], "why": "Allow null attribute lets an empty value satisfy the entry."}, {"n": 9, "domain": "Ingest", "q": "A CI exists as <code>cmdb_ci_linux_server<\/code>. A new source sends the same serial number classified as\n<code>cmdb_ci_server<\/code>. To avoid a duplicate, the identifier entry should...", "opts": [{"l": "A", "t": "use \"Search on table\" pointing at a parent table so subclasses are searched"}, {"l": "B", "t": "have a lower priority"}, {"l": "C", "t": "be marked dependent"}, {"l": "D", "t": "allow null attributes"}], "multi": false, "ans": ["A"], "why": "\"Search on table\" against a parent table finds the CI regardless of subclass."}, {"n": 10, "domain": "Ingest", "q": "What do identification inclusion rules do?", "opts": [{"l": "A", "t": "Define required relationships for a class"}, {"l": "B", "t": "Restrict which existing records IRE considers as match candidates"}, {"l": "C", "t": "Set data source precedence"}, {"l": "D", "t": "Define which CIs are included in health scoring"}], "multi": false, "ans": ["B"], "why": "Inclusion rules narrow the candidate set (e.g. active CIs only). Health inclusion rules are a different thing in Health Preferences."}, {"n": 11, "domain": "Ingest", "q": "A payload is sent to <code>/api/now/identifyreconcile<\/code> with a data source value that is not registered in the\n<code>discovery_source<\/code> choice list. What happens?", "opts": [{"l": "A", "t": "The source is created automatically"}, {"l": "B", "t": "The request is rejected with an error"}, {"l": "C", "t": "The source is recorded as \"Other\""}, {"l": "D", "t": "The CI is created but not reconciled"}], "multi": false, "ans": ["B"], "why": "Unregistered data sources are rejected."}, {"n": 12, "domain": "Ingest", "q": "Which two statements are true when comparing IntegrationHub ETL with classic Import Set transform maps? (Choose 2)", "opts": [{"l": "A", "t": "IH-ETL uses the Robust Transform Engine and invokes IRE"}, {"l": "B", "t": "Classic transform maps invoke IRE automatically"}, {"l": "C", "t": "IH-ETL supports conditional class mapping and relationship mapping in a guided UI"}, {"l": "D", "t": "IH-ETL requires custom scripting to identify CIs"}], "multi": true, "ans": ["A", "C"], "why": "Classic transform maps bypass IRE unless scripted; IH-ETL is built around IRE."}, {"n": 13, "domain": "Ingest", "q": "Which two statements about Service Graph Connectors are true? (Choose 2)", "opts": [{"l": "A", "t": "They are ServiceNow-certified integrations distributed through the Store"}, {"l": "B", "t": "They bypass IRE for performance"}, {"l": "C", "t": "They are built on IntegrationHub ETL"}, {"l": "D", "t": "They always require a MID Server"}], "multi": true, "ans": ["A", "C"], "why": "SGCs use IRE. A MID Server is needed only when the source is on-premises and unreachable from the instance."}, {"n": 14, "domain": "Ingest", "q": "A reconciliation rule for <code>cmdb_ci_server<\/code> allows Discovery to update all attributes and SCCM to update only\n<code>os_version<\/code>. SCCM sends a payload with a different <code>owned_by<\/code>. Result?", "opts": [{"l": "A", "t": "<code>owned_by<\/code> is updated from SCCM"}, {"l": "B", "t": "The CI is identified; <code>owned_by<\/code> is not updated; <code>os_version<\/code> may update subject to precedence"}, {"l": "C", "t": "The payload is rejected"}, {"l": "D", "t": "A new CI is created"}], "multi": false, "ans": ["B"], "why": "Identification succeeds; reconciliation blocks the unauthorised attribute."}, {"n": 15, "domain": "Govern", "q": "Which three are Correctness metrics? (Choose 3)", "opts": [{"l": "A", "t": "Duplicate"}, {"l": "B", "t": "Orphan"}, {"l": "C", "t": "Stale"}, {"l": "D", "t": "Required field"}, {"l": "E", "t": "Audit"}], "multi": true, "ans": ["A", "B", "C"], "why": "Required field is Completeness; audit is Compliance."}, {"n": 16, "domain": "Govern", "q": "The Compliance KPI is derived from...", "opts": [{"l": "A", "t": "audit results against a desired state"}, {"l": "B", "t": "required fields"}, {"l": "C", "t": "relationship counts"}, {"l": "D", "t": "discovery frequency"}], "multi": false, "ans": ["A"], "why": "Compliance = audit/desired-state results."}, {"n": 17, "domain": "Govern", "q": "Where do you set how much each metric contributes to the overall health score?", "opts": [{"l": "A", "t": "Scorecards"}, {"l": "B", "t": "Inclusion rules"}, {"l": "C", "t": "Data Manager"}, {"l": "D", "t": "Reconciliation rules"}], "multi": false, "ans": ["A"], "why": "Scorecards hold the weights."}, {"n": 18, "domain": "Govern", "q": "Which Data Manager policy type removes related records such as relationships rather than the CI itself?", "opts": [{"l": "A", "t": "Delete"}, {"l": "B", "t": "Archive"}, {"l": "C", "t": "Delete CMDB related entry"}, {"l": "D", "t": "Retire"}], "multi": false, "ans": ["C"], "why": "Delete CMDB related entry targets related records."}, {"n": 19, "domain": "Govern", "q": "What is the recommended sequence for CI retention governance?", "opts": [{"l": "A", "t": "Delete -&gt; Archive -&gt; Retire"}, {"l": "B", "t": "Retire -&gt; Archive -&gt; Delete"}, {"l": "C", "t": "Archive -&gt; Retire -&gt; Delete"}, {"l": "D", "t": "Any order"}], "multi": false, "ans": ["B"], "why": "Retire, then archive, then delete, each with its own policy and retention period."}, {"n": 20, "domain": "Govern", "q": "Which two fields define the standardised CI lifecycle? (Choose 2)", "opts": [{"l": "A", "t": "<code>install_status<\/code>"}, {"l": "B", "t": "<code>life_cycle_stage<\/code>"}, {"l": "C", "t": "<code>life_cycle_stage_status<\/code>"}, {"l": "D", "t": "<code>operational_status<\/code>"}], "multi": true, "ans": ["B", "C"], "why": "Standard lifecycle fields; install/operational status are legacy and kept in sync."}, {"n": 21, "domain": "Govern", "q": "Retired CIs are being counted as stale and dragging down a class's health score. Best fix?", "opts": [{"l": "A", "t": "Delete the retired CIs"}, {"l": "B", "t": "Add an inclusion rule for the class that excludes retired CIs"}, {"l": "C", "t": "Disable the staleness metric"}, {"l": "D", "t": "Lower the staleness weight in the scorecard"}], "multi": false, "ans": ["B"], "why": "Inclusion rules scope which CIs are measured. Deleting data to fix a metric is never the answer."}, {"n": 22, "domain": "Govern", "q": "Who is accountable for defining CMDB policies, standards and KPIs?", "opts": [{"l": "A", "t": "The Configuration Manager / Configuration Management process owner"}, {"l": "B", "t": "The MID Server administrator"}, {"l": "C", "t": "ITIL users"}, {"l": "D", "t": "Platform developers"}], "multi": false, "ans": ["A"], "why": "Process owner / Configuration Manager."}, {"n": 23, "domain": "Govern", "q": "Which two are Foundation data that CMDB quality depends on? (Choose 2)", "opts": [{"l": "A", "t": "Location"}, {"l": "B", "t": "Company"}, {"l": "C", "t": "Incident category"}, {"l": "D", "t": "Change template"}], "multi": true, "ans": ["A", "B"], "why": "Foundation domain data."}, {"n": 24, "domain": "Govern", "q": "CMDB Health remediation actions are implemented with...", "opts": [{"l": "A", "t": "Flow Designer flows and subflows triggered from health results"}, {"l": "B", "t": "business rules only"}, {"l": "C", "t": "transform maps"}, {"l": "D", "t": "import sets"}], "multi": false, "ans": ["A"], "why": "Remediation via Flow Designer."}, {"n": 25, "domain": "Govern", "q": "Which older feature schedules field-by-field record verification tasks for users?", "opts": [{"l": "A", "t": "Data Certification"}, {"l": "B", "t": "CMDB 360"}, {"l": "C", "t": "Query Builder"}, {"l": "D", "t": "Data refresh rules"}], "multi": false, "ans": ["A"], "why": "Data Certification."}, {"n": 26, "domain": "Govern", "q": "Business Applications exist but none is linked to an Application Service. Where is this surfaced as a CSDM\nadoption gap?", "opts": [{"l": "A", "t": "CSDM Data Foundations Dashboard"}, {"l": "B", "t": "CI Class Manager"}, {"l": "C", "t": "The Compliance KPI"}, {"l": "D", "t": "The MID Server dashboard"}], "multi": false, "ans": ["A"], "why": "CSDM Data Foundations Dashboard reports adoption gaps per stage."}, {"n": 27, "domain": "Govern", "q": "A team asks to feed a new tool's inventory into the CMDB. Which sequence follows governance best practice?", "opts": [{"l": "A", "t": "Point the tool at the <code>cmdb_ci<\/code> tables directly to save time"}, {"l": "B", "t": "Register the discovery source, define reconciliation and precedence rules, obtain governance-board approval, implement with a Service Graph Connector or IH-ETL, test in sub-production"}, {"l": "C", "t": "Let the team import an Excel file each month"}, {"l": "D", "t": "Enable Multisource CMDB and let IRE sort it out"}], "multi": false, "ans": ["B"], "why": "Register, define rules, approve, use certified tooling, test."}, {"n": 28, "domain": "Govern", "q": "Which two field types contribute to a CI being counted as complete? (Choose 2)", "opts": [{"l": "A", "t": "Required fields"}, {"l": "B", "t": "Recommended fields"}, {"l": "C", "t": "Relationship fields"}, {"l": "D", "t": "Audit fields"}], "multi": true, "ans": ["A", "B"], "why": "Completeness = required + recommended fields."}, {"n": 29, "domain": "Insight", "q": "Saved CMDB Query Builder queries can be used for which two purposes? (Choose 2)", "opts": [{"l": "A", "t": "Defining CMDB Group membership"}, {"l": "B", "t": "Multisource comparisons across data sources"}, {"l": "C", "t": "Defining reconciliation rules"}, {"l": "D", "t": "Creating CI classes"}], "multi": true, "ans": ["A", "B"], "why": "Saved queries drive CMDB Groups and multisource comparisons."}, {"n": 30, "domain": "Insight", "q": "Which role is required to create queries in CMDB Query Builder?", "opts": [{"l": "A", "t": "<code>cmdb_query_builder<\/code>"}, {"l": "B", "t": "<code>itil<\/code>"}, {"l": "C", "t": "<code>asset<\/code>"}, {"l": "D", "t": "<code>cmdb_read<\/code>"}], "multi": false, "ans": ["A"], "why": "<code>cmdb_query_builder<\/code> (create/run); <code>cmdb_query_builder_read<\/code> runs only."}, {"n": 31, "domain": "Insight", "q": "A change manager wants to see everything upstream and downstream of a database CI before approving a change.\nWhich tool?", "opts": [{"l": "A", "t": "Dependency Views"}, {"l": "B", "t": "Data Manager"}, {"l": "C", "t": "Class Manager"}, {"l": "D", "t": "Health Dashboard"}], "multi": false, "ans": ["A"], "why": "Dependency Views for impact."}, {"n": 32, "domain": "Insight", "q": "CMDB 360 is blank for every CI. Most likely reason?", "opts": [{"l": "A", "t": "Multisource CMDB is not enabled"}, {"l": "B", "t": "The user lacks the Query Builder role"}, {"l": "C", "t": "Health jobs are inactive"}, {"l": "D", "t": "Life-cycle rules are missing"}], "multi": false, "ans": ["A"], "why": "No Multisource, no CMDB 360 data."}, {"n": 33, "domain": "Insight", "q": "Leadership wants a month-over-month trend of CMDB health. Which is the best source?", "opts": [{"l": "A", "t": "Performance Analytics indicators on the health KPIs"}, {"l": "B", "t": "The Health Dashboard, which shows the current state only"}, {"l": "C", "t": "CI Class Manager"}, {"l": "D", "t": "CMDB 360"}], "multi": false, "ans": ["A"], "why": "PA gives trends; the dashboard is a snapshot."}, {"n": 34, "domain": "Insight", "q": "Which statement is true?", "opts": [{"l": "A", "t": "CMDB Workspace consolidates health, Data Manager, Query Builder, Class Manager and CMDB 360 in one experience"}, {"l": "B", "t": "The classic CMDB Dashboard is the newest interface"}, {"l": "C", "t": "CMDB Workspace is only for ITOM licensees"}, {"l": "D", "t": "Query Builder is only available in the classic UI"}], "multi": false, "ans": ["A"], "why": "CMDB Workspace is the consolidated modern experience."}, {"n": 35, "domain": "Insight", "q": "Which view is produced by Service Mapping?", "opts": [{"l": "A", "t": "The Application Service map"}, {"l": "B", "t": "The health scorecard"}, {"l": "C", "t": "The class hierarchy"}, {"l": "D", "t": "The precedence view"}], "multi": false, "ans": ["A"], "why": "Service Mapping builds Application Service maps."}, {"n": 36, "domain": "CSDM", "q": "Which two statements about Business Applications are true? (Choose 2)", "opts": [{"l": "A", "t": "They are related directly to servers and databases"}, {"l": "B", "t": "They are portfolio records owned through Application Portfolio Management"}, {"l": "C", "t": "They relate to Application Services through a <code>Consumes::Consumed by<\/code> relationship"}, {"l": "D", "t": "They are the CI referenced on outage incidents"}], "multi": true, "ans": ["B", "C"], "why": "Business Applications are portfolio records; infrastructure and outages attach to Application Services."}, {"n": 37, "domain": "CSDM", "q": "How is a Service Offering linked to its Service?", "opts": [{"l": "A", "t": "A <code>Depends on::Used by<\/code> relationship"}, {"l": "B", "t": "The <code>parent<\/code> reference field"}, {"l": "C", "t": "<code>model_id<\/code>"}, {"l": "D", "t": "A CMDB Group"}], "multi": false, "ans": ["B"], "why": "Offering -&gt; Service is the <code>parent<\/code> reference, not a relationship."}, {"n": 38, "domain": "CSDM", "q": "Which construct represents infrastructure under a Technical Service Offering?", "opts": [{"l": "A", "t": "Dynamic CI Group"}, {"l": "B", "t": "CMDB Group"}, {"l": "C", "t": "Business Capability"}, {"l": "D", "t": "Product Model"}], "multi": false, "ans": ["A"], "why": "Dynamic CI Group (query-based) under Technical Service Offerings."}, {"n": 39, "domain": "CSDM", "q": "Which domain is new in CSDM 5?", "opts": [{"l": "A", "t": "Foundation"}, {"l": "B", "t": "Ideation &amp; Strategy"}, {"l": "C", "t": "Service Consumption"}, {"l": "D", "t": "Manage Portfolios"}], "multi": false, "ans": ["B"], "why": "Ideation &amp; Strategy."}, {"n": 40, "domain": "CSDM", "q": "Which maturity stage adds Technical Services, Technical Service Offerings and Dynamic CI Groups?", "opts": [{"l": "A", "t": "Crawl"}, {"l": "B", "t": "Walk"}, {"l": "C", "t": "Run"}, {"l": "D", "t": "Fly"}], "multi": false, "ans": ["B"], "why": "Walk = technical side; Run = business side."}]}], "cards": [{"id": 0, "block": "Block A - CSDM vocabulary", "term": "CSDM", "def": "Common Service Data Model: ServiceNow's prescriptive standard for which OOTB tables to use for services, applications and their relationships. Guidance, not a plugin."}, {"id": 1, "block": "Block A - CSDM vocabulary", "term": "CSDM 5 domains", "def": "Foundation; Ideation &amp; Strategy; Design &amp; Planning; Build &amp; Integration; Service Delivery; Service Consumption; Manage Portfolios."}, {"id": 2, "block": "Block A - CSDM vocabulary", "term": "CSDM 4 domains", "def": "Foundation; Design; Build; Manage Technical Services; Sell/Consume; Manage Portfolio."}, {"id": 3, "block": "Block A - CSDM vocabulary", "term": "Ideation &amp; Strategy", "def": "New in CSDM 5: product ideas, planning items (demand/project/epic), strategic priorities, goals, targets."}, {"id": 4, "block": "Block A - CSDM vocabulary", "term": "Foundation domain", "def": "Reference data everything else points to: Company, Business Unit, Department, Cost Center, Location, User, Group, CMDB Group, Product Model, Vendor, Manufacturer, Business Process, Contract, SBOM."}, {"id": 5, "block": "Block A - CSDM vocabulary", "term": "Business Application", "def": "<code>cmdb_ci_business_app<\/code>. Portfolio record for software the organisation owns (APM). Not operational; no infrastructure relationships. Design &amp; Planning domain."}, {"id": 6, "block": "Block A - CSDM vocabulary", "term": "Application Service", "def": "<code>cmdb_ci_service_auto<\/code>. A running, deployed instance of an application in an environment, with a dependency map to infrastructure. Service Delivery domain. The operational CI for impact."}, {"id": 7, "block": "Block A - CSDM vocabulary", "term": "Mapped Application Service", "def": "Application Service whose map is built by Service Mapping (top-down)."}, {"id": 8, "block": "Block A - CSDM vocabulary", "term": "Tag-based Application Service", "def": "Application Service whose members are CIs carrying specific tags (key/value)."}, {"id": 9, "block": "Block A - CSDM vocabulary", "term": "Calculated Application Service", "def": "Application Service whose members are derived from relationship rules/calculations."}, {"id": 10, "block": "Block A - CSDM vocabulary", "term": "Manual Application Service", "def": "Application Service whose members are added by hand in the map editor."}, {"id": 11, "block": "Block A - CSDM vocabulary", "term": "Technical Service (CSDM 4) / Technology Management Service (CSDM 5)", "def": "<code>cmdb_ci_service_technical<\/code>. A service IT provides to itself or other IT teams, e.g. Database Hosting."}, {"id": 12, "block": "Block A - CSDM vocabulary", "term": "Technical Service Offering", "def": "<code>service_offering<\/code> with a technical service as parent; carries commitments, support group, and infrastructure via Dynamic CI Groups."}, {"id": 13, "block": "Block A - CSDM vocabulary", "term": "Business Service", "def": "<code>cmdb_ci_service_business<\/code>. Service consumed by the business/customers, e.g. Payroll, Email. Service Consumption domain."}, {"id": 14, "block": "Block A - CSDM vocabulary", "term": "Business Service Offering", "def": "<code>service_offering<\/code> with a business service as parent; audience, SLA, hours, price. What the Incident \"Service offering\" field should point to."}, {"id": 15, "block": "Block A - CSDM vocabulary", "term": "Service Offering", "def": "Generic term for a variant/level of a Business or Technical Service; table <code>service_offering<\/code>, linked by the <code>parent<\/code> reference."}, {"id": 16, "block": "Block A - CSDM vocabulary", "term": "Dynamic CI Group", "def": "<code>cmdb_ci_query_based_service<\/code>. Query-defined set of CIs used under Technical Service Offerings instead of thousands of individual relationships."}, {"id": 17, "block": "Block A - CSDM vocabulary", "term": "Business Capability", "def": "<code>cmdb_ci_business_capability<\/code>. What the business does; realised by Business Applications; APM heat maps."}, {"id": 18, "block": "Block A - CSDM vocabulary", "term": "Information Object", "def": "<code>cmdb_ci_information_object<\/code>. Data entity created/used by an application. Design &amp; Planning."}, {"id": 19, "block": "Block A - CSDM vocabulary", "term": "Product Model", "def": "<code>cmdb_model<\/code>. Catalogue definition of hardware/software/application; a CI references it via model_id. Foundation."}, {"id": 20, "block": "Block A - CSDM vocabulary", "term": "Service Portfolio", "def": "Manage Portfolios domain grouping of services (SPM)."}, {"id": 21, "block": "Block A - CSDM vocabulary", "term": "Service Instance", "def": "CSDM 5 Service Delivery concept: an individual instance of a delivered service (e.g. a tenant/subscription)."}, {"id": 22, "block": "Block A - CSDM vocabulary", "term": "Legacy <code>cmdb_ci_service<\/code>", "def": "Old catch-all \"Business Service\" parent table. CSDM: do not create records here; use the specific child classes."}, {"id": 23, "block": "Block A - CSDM vocabulary", "term": "Crawl", "def": "Foundation data + Application Services (manual OK) + Business Applications registered."}, {"id": 24, "block": "Block A - CSDM vocabulary", "term": "Walk", "def": "Technical Services and Offerings, Dynamic CI Groups, Business Capabilities, mapped Application Services."}, {"id": 25, "block": "Block A - CSDM vocabulary", "term": "Run", "def": "Business Services and Offerings, Service Portfolio, catalog linked to offerings, SLAs per offering."}, {"id": 26, "block": "Block A - CSDM vocabulary", "term": "Fly", "def": "Full portfolio/value stream/product operating model; Information Objects, Processes, DevOps, Ideation, AI/OT/API."}, {"id": 27, "block": "Block A - CSDM vocabulary", "term": "Consumes::Consumed by", "def": "Relationship from Business Application to its Application Services (check direction)."}, {"id": 28, "block": "Block A - CSDM vocabulary", "term": "Depends on::Used by", "def": "Relationship from a service to what it depends on (Application Service -&gt; server; Business Service Offering -&gt; Application Service)."}, {"id": 29, "block": "Block A - CSDM vocabulary", "term": "Incident \"Service\" field", "def": "<code>business_service<\/code>: the Business Service or Application Service impacted."}, {"id": 30, "block": "Block A - CSDM vocabulary", "term": "Incident \"Service offering\" field", "def": "<code>service_offering<\/code>: the specific offering impacted."}, {"id": 31, "block": "Block A - CSDM vocabulary", "term": "Incident \"Configuration item\" field", "def": "<code>cmdb_ci<\/code>: the technical CI at fault."}, {"id": 32, "block": "Block A - CSDM vocabulary", "term": "Environment", "def": "Attribute of the Application Service (PROD/TEST), never a reason for a second Business Application."}, {"id": 33, "block": "Block A - CSDM vocabulary", "term": "CSDM Data Foundations Dashboard", "def": "Store app showing CSDM adoption/maturity indicators per stage plus CMDB health signals."}, {"id": 34, "block": "Block B - CMDB structure and Configuration", "term": "<code>cmdb_ci<\/code>", "def": "Base Configuration Item table; every CI class extends it."}, {"id": 35, "block": "Block B - CMDB structure and Configuration", "term": "Table-per-class extension", "def": "Child class table inherits all parent columns; a record exists once, in its most specific class."}, {"id": 36, "block": "Block B - CMDB structure and Configuration", "term": "<code>cmdb_rel_ci<\/code>", "def": "Relationship table: parent, child, type."}, {"id": 37, "block": "Block B - CMDB structure and Configuration", "term": "<code>cmdb_rel_type<\/code>", "def": "Relationship types, named <code>Parent descriptor::Child descriptor<\/code>."}, {"id": 38, "block": "Block B - CMDB structure and Configuration", "term": "Suggested relationship", "def": "Class Manager setting listing relationship types recommended between two classes."}, {"id": 39, "block": "Block B - CMDB structure and Configuration", "term": "Dependent relationship / containment rule", "def": "Class Manager rule stating a class must be hosted by/contained in another; used by IRE dependent identification."}, {"id": 40, "block": "Block B - CMDB structure and Configuration", "term": "CI Class Manager", "def": "Single UI for class hierarchy: attributes, identification rule, reconciliation rules, health preferences, suggested and dependent relationships, model category."}, {"id": 41, "block": "Block B - CMDB structure and Configuration", "term": "Model category", "def": "Links a CI class to an asset class so asset-CI synchronisation works."}, {"id": 42, "block": "Block B - CMDB structure and Configuration", "term": "<code>discovery_source<\/code>", "def": "Choice field on CI naming which source last updated it; every data source must be registered here."}, {"id": 43, "block": "Block B - CMDB structure and Configuration", "term": "<code>correlation_id<\/code>", "def": "External system identifier field on CI, frequently used as an identifier attribute for integrations."}, {"id": 44, "block": "Block B - CMDB structure and Configuration", "term": "<code>install_status<\/code> / <code>operational_status<\/code>", "def": "Legacy status fields; still used, now backed by lifecycle stage/status."}, {"id": 45, "block": "Block B - CMDB structure and Configuration", "term": "Life cycle stage / stage status", "def": "Standardised lifecycle fields on cmdb_ci; valid combinations defined by per-class life cycle rules."}, {"id": 46, "block": "Block B - CMDB structure and Configuration", "term": "Orphan CI", "def": "CI with no relationships to any other CI (as defined by orphan rules)."}, {"id": 47, "block": "Block B - CMDB structure and Configuration", "term": "Stale CI", "def": "CI not updated within the staleness threshold for its class."}, {"id": 48, "block": "Block B - CMDB structure and Configuration", "term": "Duplicate CI", "def": "More than one CI matching the class identification rule."}, {"id": 49, "block": "Block B - CMDB structure and Configuration", "term": "CMDB Group", "def": "<code>cmdb_group<\/code>: set of CIs by manual list or saved Query Builder query; used for health slicing and scoping."}, {"id": 50, "block": "Block B - CMDB structure and Configuration", "term": "CMDB CI Class Models (Store)", "def": "Continuously updated class model content; check before creating custom classes."}, {"id": 51, "block": "Block C - Ingest and IRE", "term": "IRE", "def": "Identification and Reconciliation Engine: central framework that decides whether a payload matches an existing CI (identification) and which source may update which attribute (reconciliation)."}, {"id": 52, "block": "Block C - Ingest and IRE", "term": "Identification rule", "def": "One per class (inherited if absent); ordered identifier entries; first matching entry wins; no match = insert."}, {"id": 53, "block": "Block C - Ingest and IRE", "term": "Identifier entry", "def": "A set of criterion attributes (or a lookup table) tried in priority order."}, {"id": 54, "block": "Block C - Ingest and IRE", "term": "Independent identifier", "def": "CI identifiable by its own attributes (serial number, name)."}, {"id": 55, "block": "Block C - Ingest and IRE", "term": "Dependent identifier", "def": "CI identified only in the context of a parent CI (network adapter on a computer); payload must include parent + relationship."}, {"id": 56, "block": "Block C - Ingest and IRE", "term": "Lookup-based identifier", "def": "Match on a related lookup table such as <code>cmdb_serial_number<\/code> or network adapter MACs."}, {"id": 57, "block": "Block C - Ingest and IRE", "term": "Allow null attribute", "def": "Entry option that allows a match when the attribute is empty; source of false matches."}, {"id": 58, "block": "Block C - Ingest and IRE", "term": "Enforce exact count match", "def": "Entry option requiring all criterion attributes to be present."}, {"id": 59, "block": "Block C - Ingest and IRE", "term": "Identification inclusion rule", "def": "Narrows the candidate records IRE searches (e.g. only active CIs)."}, {"id": 60, "block": "Block C - Ingest and IRE", "term": "De-duplication task", "def": "<code>reconcile_duplicate_task<\/code>; created when an identifier entry finds more than one match; worked in CMDB Workspace."}, {"id": 61, "block": "Block C - Ingest and IRE", "term": "Duplicate CI Remediator", "def": "Tool that merges duplicate CIs into a survivor and re-points relationships/references."}, {"id": 62, "block": "Block C - Ingest and IRE", "term": "Reconciliation rule", "def": "Declares which data sources may update a class (optionally specific attributes)."}, {"id": 63, "block": "Block C - Ingest and IRE", "term": "Data source precedence rule", "def": "Orders sources per class/attributes; lower number = higher priority."}, {"id": 64, "block": "Block C - Ingest and IRE", "term": "Data refresh rule", "def": "Allows a lower-priority source to update after the higher-priority source has been silent for N days."}, {"id": 65, "block": "Block C - Ingest and IRE", "term": "Multisource CMDB", "def": "Optional mode storing per-source attribute values; enables CMDB 360 and multisource queries."}, {"id": 66, "block": "Block C - Ingest and IRE", "term": "<code>createOrUpdateCI<\/code>", "def": "<code>sn_cmdb.IdentificationEngine<\/code> API to push a payload through IRE from a script."}, {"id": 67, "block": "Block C - Ingest and IRE", "term": "<code>/api/now/identifyreconcile<\/code>", "def": "REST endpoint to push a payload through IRE from outside."}, {"id": 68, "block": "Block C - Ingest and IRE", "term": "<code>identifyCI<\/code>", "def": "IRE API that only reports what would match, without writing."}, {"id": 69, "block": "Block C - Ingest and IRE", "term": "Identification simulation", "def": "CMDB Workspace tool to test a payload against rules without committing."}, {"id": 70, "block": "Block C - Ingest and IRE", "term": "Service Graph Connector (SGC)", "def": "Certified Store integration built on IntegrationHub ETL; registers discovery source <code>SG-&lt;Vendor&gt;<\/code>; preferred over custom imports."}, {"id": 71, "block": "Block C - Ingest and IRE", "term": "IntegrationHub ETL", "def": "Guided low-code builder for Robust Transform Engine maps that load import set data into CMDB classes through IRE."}, {"id": 72, "block": "Block C - Ingest and IRE", "term": "Robust Transform Engine (RTE)", "def": "Transform framework used by IH-ETL and SGCs: entity mapping, conditional class selection, relationship mapping."}, {"id": 73, "block": "Block C - Ingest and IRE", "term": "Import Set + Transform Map", "def": "Classic import path; writes directly to target tables and bypasses IRE unless scripted."}, {"id": 74, "block": "Block C - Ingest and IRE", "term": "Discovery", "def": "Agentless horizontal discovery via MID Server: scan -&gt; classify -&gt; identify -&gt; explore with patterns."}, {"id": 75, "block": "Block C - Ingest and IRE", "term": "MID Server", "def": "Java service inside the customer network executing probes/patterns and integrations; outbound-only to the instance."}, {"id": 76, "block": "Block C - Ingest and IRE", "term": "Pattern", "def": "Step-based discovery/mapping logic (Pattern Designer) replacing classic probes/sensors."}, {"id": 77, "block": "Block C - Ingest and IRE", "term": "Service Mapping", "def": "Top-down discovery from an entry point that builds Application Service maps."}, {"id": 78, "block": "Block C - Ingest and IRE", "term": "Agent Client Collector (ACC)", "def": "Agent-based collection for hosts where agentless is impossible; feeds Discovery and monitoring."}, {"id": 79, "block": "Block C - Ingest and IRE", "term": "Entry point", "def": "URL/host:port from which Service Mapping starts traversing an application service."}, {"id": 80, "block": "Block D - Govern and Insight", "term": "CMDB Health Dashboard", "def": "OOTB dashboard scoring Completeness, Correctness and Compliance at CMDB, class, group and CI level."}, {"id": 81, "block": "Block D - Govern and Insight", "term": "Completeness", "def": "Required and Recommended fields populated."}, {"id": 82, "block": "Block D - Govern and Insight", "term": "Correctness", "def": "Duplicates, Orphans, Staleness, relationship correctness."}, {"id": 83, "block": "Block D - Govern and Insight", "term": "Compliance", "def": "Results of audits against desired state / certification."}, {"id": 84, "block": "Block D - Govern and Insight", "term": "Health Preferences", "def": "Per-class settings: inclusion rules, required/recommended fields, orphan rules, staleness rules."}, {"id": 85, "block": "Block D - Govern and Insight", "term": "Inclusion rule", "def": "Which CIs of a class are evaluated for health."}, {"id": 86, "block": "Block D - Govern and Insight", "term": "Scorecard", "def": "Weights that decide how metrics/KPIs aggregate into the score."}, {"id": 87, "block": "Block D - Govern and Insight", "term": "Health jobs", "def": "Scheduled score calculations and remediation jobs; disabled by default."}, {"id": 88, "block": "Block D - Govern and Insight", "term": "Health remediation", "def": "Flow Designer flows/subflows triggered from health results (e.g. retire stale CIs)."}, {"id": 89, "block": "Block D - Govern and Insight", "term": "CMDB Data Manager", "def": "Policy engine in CMDB Workspace for CI lifecycle: Retire, Archive, Delete, Attestation, Delete CMDB related entry."}, {"id": 90, "block": "Block D - Govern and Insight", "term": "Life cycle rule", "def": "Per-class definition of valid lifecycle stage/status combos; must be active for Retire/Archive/Delete policies."}, {"id": 91, "block": "Block D - Govern and Insight", "term": "Attestation", "def": "Data Manager policy creating tasks for CI owners to confirm data is still correct."}, {"id": 92, "block": "Block D - Govern and Insight", "term": "Data Certification", "def": "Older feature scheduling record-verification tasks field by field."}, {"id": 93, "block": "Block D - Govern and Insight", "term": "Audit (Compliance)", "def": "Desired-state checks that report non-compliant CIs into the Compliance KPI."}, {"id": 94, "block": "Block D - Govern and Insight", "term": "CMDB Workspace", "def": "Next Experience workspace: health, data manager, query builder, class manager, CMDB 360, IRE simulation, task queues."}, {"id": 95, "block": "Block D - Govern and Insight", "term": "CMDB 360", "def": "Per-CI comparison of each source's reported values; needs Multisource CMDB."}, {"id": 96, "block": "Block D - Govern and Insight", "term": "CMDB Query Builder", "def": "Visual multi-class, relationship-aware query tool; saved queries feed CMDB Groups and reports."}, {"id": 97, "block": "Block D - Govern and Insight", "term": "Dependency Views", "def": "Upstream/downstream relationship map from any CI (BSM map); impact analysis."}, {"id": 98, "block": "Block D - Govern and Insight", "term": "Configuration Control Board", "def": "Governance body approving class changes, new sources, attribute additions; reviews health."}, {"id": 99, "block": "Block D - Govern and Insight", "term": "Configuration Manager / Process Owner", "def": "Owns CMDB policy, standards, KPIs and the governance cadence."}, {"id": 100, "block": "Block D - Govern and Insight", "term": "Class steward / data owner", "def": "Accountable for a class or data domain's quality and definitions."}, {"id": 101, "block": "Block D - Govern and Insight", "term": "Service owner / Application owner", "def": "Accountable for service records (owned_by / managed_by / support_group)."}, {"id": 102, "block": "Block D - Govern and Insight", "term": "<code>cmdb_query_builder<\/code>", "def": "Role to create and run Query Builder queries (<code>_read<\/code> variant to run only)."}, {"id": 103, "block": "Block E - added from the official blueprint", "term": "Six health metrics", "def": "Required fields, Recommended fields, Duplicate, Orphan, Stale, Audit."}, {"id": 104, "block": "Block E - added from the official blueprint", "term": "CSF vs KPI", "def": "Critical Success Factor = outcome the CMDB must deliver; KPI = the measured proxy from the Health Dashboard."}, {"id": 105, "block": "Block E - added from the official blueprint", "term": "Principal class", "def": "A class your organisation designates as important; health dashboards, Data Foundations Dashboard and Workspace focus on principal classes by default."}, {"id": 106, "block": "Block E - added from the official blueprint", "term": "De-duplication wizard", "def": "Duplicate CI Remediator: pick the survivor CI, merge attributes, move relationships and references, retire the rest."}, {"id": 107, "block": "Block E - added from the official blueprint", "term": "Playbook (Data Foundations Dashboard)", "def": "Guided fix per indicator: Summary of indicator -&gt; Overview of problem -&gt; Importance of addressing issue -&gt; Fix or Improve."}, {"id": 108, "block": "Block E - added from the official blueprint", "term": "Indicator (Data Foundations Dashboard)", "def": "A measured data-quality or CSDM-adoption condition, each with a playbook."}, {"id": 109, "block": "Block E - added from the official blueprint", "term": "Model category", "def": "Maps a CI class to an asset class; drives asset-CI auto-creation and synchronisation."}, {"id": 110, "block": "Block E - added from the official blueprint", "term": "Asset State -&gt; CI", "def": "Changing Asset State updates CI Install status and Hardware status."}, {"id": 111, "block": "Block E - added from the official blueprint", "term": "<code>SNAssetManagement<\/code>", "def": "Discovery source value on CIs created from an asset record."}, {"id": 112, "block": "Block E - added from the official blueprint", "term": "<code>ServiceNow<\/code> discovery source", "def": "Discovery source value on CIs created manually in the UI or by script."}, {"id": 113, "block": "Block E - added from the official blueprint", "term": "Unified Map", "def": "Single map experience replacing Dependency Views and the Application Service map; levels, filters, legend, details panel, impact."}, {"id": 114, "block": "Block E - added from the official blueprint", "term": "Natural Language Query", "def": "Type a question in Query Builder; it builds the relationship query for you to refine."}, {"id": 115, "block": "Block E - added from the official blueprint", "term": "CMDB saved query", "def": "Stored Query Builder query; scheduled runs and persisted results feed reports, including CMDB 360 data."}, {"id": 116, "block": "Block E - added from the official blueprint", "term": "Key-value tags (<code>cmdb_key_value<\/code>)", "def": "Tag pairs on CIs used for compliance identifiers, tag-based services and grouping."}, {"id": 117, "block": "Block E - added from the official blueprint", "term": "Non-discoverable CI", "def": "CI no tool can discover (business application, business service, contract, facility); populated manually or by import through IRE and kept current by attestation."}, {"id": 118, "block": "Block E - added from the official blueprint", "term": "Technical debt (CMDB)", "def": "Customisations that block upgrades: base-table changes, IRE bypass, scripted transforms, custom relationship types, non-CSDM naming."}, {"id": 119, "block": "Block E - added from the official blueprint", "term": "CMDB Librarian / Data Steward", "def": "Day-to-day data quality role: remediation tasks, attestation follow-up, stewardship of a data domain."}, {"id": 120, "block": "Block E - added from the official blueprint", "term": "CI Class Owner", "def": "Accountable for a class's definition, attributes and data quality."}, {"id": 121, "block": "Block E - added from the official blueprint", "term": "Cut score", "def": "Predetermined pass mark ServiceNow does not publish; not always 70%."}], "labs": [{"id": 0, "section": "Configuration (15 min)", "text": "All &gt; Configuration &gt; CI Class Manager. Open <strong>Server<\/strong>: view Attributes, Identification Rule (note entry", "extra": "<p>priorities and independent/dependent), Reconciliation Rules, Health, Suggested Relationships, Dependent\nRelationships, Model Category.<\/p>"}, {"id": 1, "section": "Configuration (15 min)", "text": "Open <strong>Network Adapter<\/strong>: confirm its identification rule is dependent on Computer.", "extra": ""}, {"id": 2, "section": "Configuration (15 min)", "text": "Add a child class under Application via Class Manager (any name). Note what gets inherited.", "extra": ""}, {"id": 3, "section": "Configuration (15 min)", "text": "Open <code>cmdb_rel_type.list<\/code>: find <code>Depends on::Used by<\/code>, <code>Hosted on::Hosts<\/code>, <code>Consumes::Consumed by<\/code>.", "extra": ""}, {"id": 4, "section": "Ingest / IRE (20 min)", "text": "CMDB Workspace &gt; <strong>IRE simulation<\/strong> (or Scripts - Background) with this payload, run twice; second run should", "extra": "<p>update, not insert:\n<code>{\"items\":[{\"className\":\"cmdb_ci_linux_server\",\"values\":{\"name\":\"cisdf-test-01\",\"serial_number\":\"CISDF0001\",\"os\":\"Linux Red Hat\"}}]}<\/code>\nScript form: <code>var r = new sn_cmdb.IdentificationEngine().createOrUpdateCI('ServiceNow', JSON.stringify(payload)); gs.info(r);<\/code><\/p>"}, {"id": 5, "section": "Ingest / IRE (20 min)", "text": "Send a Network Adapter item with no parent and read the error text (dependent identification).", "extra": ""}, {"id": 6, "section": "Ingest / IRE (20 min)", "text": "Configuration &gt; Identification/Reconciliation &gt; <strong>Reconciliation Definitions<\/strong>, <strong>Data Source Precedences<\/strong>,", "extra": "<p><strong>Data Refresh Rules<\/strong>: open one of each and read the fields.<\/p>"}, {"id": 7, "section": "Ingest / IRE (20 min)", "text": "<code>sys_choice.list<\/code>, filter <code>element=discovery_source<\/code>: see the registered sources and the <code>SG-<\/code> prefix pattern.", "extra": ""}, {"id": 8, "section": "Ingest / IRE (20 min)", "text": "IntegrationHub ETL: open All &gt; IntegrationHub ETL, start a new ETL definition against any import set table just", "extra": "<p>to see the guided steps (Entities, Class mapping, Relationships, Test and rollback).<\/p>"}, {"id": 9, "section": "Govern (25 min)", "text": "Configuration &gt; <strong>Health Preference<\/strong> (or CMDB Workspace &gt; Health &gt; Preferences): open Inclusion Rules,", "extra": "<p>Required Fields, Recommended Fields, Orphan Rules, Staleness Rules, Scorecards.<\/p>"}, {"id": 10, "section": "Govern (25 min)", "text": "System Scheduler &gt; Scheduled Jobs, search \"CMDB Health\": note they are inactive by default; activate the", "extra": "<p>Completeness/Correctness/Compliance score calculations and run one.<\/p>"}, {"id": 11, "section": "Govern (25 min)", "text": "CMDB Workspace &gt; <strong>Data Manager<\/strong>: create a Retire policy on a test class; observe the life-cycle rule", "extra": "<p>requirement. Open <strong>Life Cycle Rules<\/strong> and activate one for the class, then re-save the policy.<\/p>"}, {"id": 12, "section": "Govern (25 min)", "text": "Open a CI and find <strong>Life cycle stage<\/strong> and <strong>Life cycle stage status<\/strong> on the form.", "extra": ""}, {"id": 13, "section": "Govern (25 min)", "text": "CMDB Workspace &gt; Health &gt; look at duplicates and the remediation options (Duplicate CI Remediator).", "extra": ""}, {"id": 14, "section": "Govern (25 min)", "text": "Create a CMDB Group from a saved Query Builder query and view health for it.", "extra": ""}, {"id": 15, "section": "Insight (15 min)", "text": "CMDB Workspace &gt; <strong>Query Builder<\/strong>: build \"Application Service -&gt; Depends on -&gt; Linux Server\", run it, save it.", "extra": ""}, {"id": 16, "section": "Insight (15 min)", "text": "CMDB Workspace &gt; <strong>CMDB 360<\/strong>: note it is empty; find the Multisource CMDB setting under", "extra": "<p>Identification/Reconciliation properties and read its description.<\/p>"}, {"id": 17, "section": "Insight (15 min)", "text": "Open any server &gt; Related Links &gt; <strong>Dependency Views<\/strong> (or the map icon on the form).", "extra": ""}, {"id": 18, "section": "Insight (15 min)", "text": "If the Store app is installable on your PDI, install \"CMDB and CSDM Data Foundations Dashboard\" and open it.", "extra": ""}, {"id": 19, "section": "CSDM (15 min)", "text": "Create one Business Application, one Application Service (manual), one Business Service, one Business Service", "extra": "<p>Offering (parent = the Business Service), one Technical Service, one Technical Service Offering.<\/p>"}, {"id": 20, "section": "CSDM (15 min)", "text": "Relate Business Application -&gt; Application Service (<code>Consumes::Consumed by<\/code>), Application Service -&gt; a server", "extra": "<p>(<code>Depends on::Used by<\/code>), Business Service Offering -&gt; Application Service (<code>Depends on::Used by<\/code>).<\/p>"}, {"id": 21, "section": "CSDM (15 min)", "text": "Open an Incident: set Service, Service offering and Configuration item and watch the reference qualifiers.", "extra": ""}, {"id": 22, "section": "CSDM (15 min)", "text": "Look at the class of each record you created and match it to the study guide table in section 6.3.", "extra": ""}], "plan": [{"day": "Thursday", "label": "Thu · 3 hours · find the gaps", "steps": [{"id": "thu-0", "day": "Thursday", "text": "Take the diagnostic quiz cold, timed to 35 minutes. No notes.", "href": "#tests/diag", "dur": "35 min"}, {"id": "thu-1", "day": "Thursday", "text": "Read your result by domain. Note the two weakest domains.", "href": "#tests/diag", "dur": "10 min"}, {"id": "thu-2", "day": "Thursday", "text": "Study guide section 6, CSDM, end to end.", "href": "#guide/6-domain-csdm-fundamentals-11-officially-but-its-vocabulary-appears-across-the-other-89", "dur": "45 min"}, {"id": "thu-3", "day": "Thursday", "text": "Flashcards, Block A (CSDM) until every card is marked known.", "href": "#cards", "dur": "15 min"}, {"id": "thu-4", "day": "Thursday", "text": "Study guide section 4, Govern. This is 35% of the exam.", "href": "#guide/4-domain-govern-35-the-biggest-block", "dur": "40 min"}, {"id": "thu-5", "day": "Thursday", "text": "Redo the diagnostic questions you missed, from memory.", "href": "#tests/diag", "dur": "10 min"}]}, {"day": "Friday", "label": "Fri · deep work and hands-on", "steps": [{"id": "fri-0", "day": "Friday", "text": "Study guide sections 3 (Ingest) and 2 (Configuration). Slow down on IRE rule types, precedence, data refresh rules.", "href": "#guide/3-domain-ingest-19", "dur": "45 min"}, {"id": "fri-1", "day": "Friday", "text": "Study guide section 5 (Insight).", "href": "#guide/5-domain-insight-20", "dur": "20 min"}, {"id": "fri-2", "day": "Friday", "text": "Blueprint addendum, especially 2.1 asset-CI, 2.11 principal classes, 2.12 playbooks, 2.15 queries.", "href": "#addendum", "dur": "30 min"}, {"id": "fri-3", "day": "Friday", "text": "Hands-on PDI lab checklist.", "href": "#labs", "dur": "60-90 min"}, {"id": "fri-4", "day": "Friday", "text": "Practice bank: Quiz 1 and Quiz 2 in \"All questions\" mode.", "href": "#bank", "dur": "60 min"}, {"id": "fri-5", "day": "Friday", "text": "Mock exam A, timed to 50 minutes.", "href": "#tests/mock", "dur": "50 min"}, {"id": "fri-6", "day": "Friday", "text": "Read every mock explanation, including the ones you got right. Flashcards, all blocks.", "href": "#tests/mock", "dur": "30 min"}]}, {"day": "Saturday", "label": "Sat · consolidate, then rest", "steps": [{"id": "sat-0", "day": "Saturday", "text": "Common traps sheet, twice.", "href": "#traps", "dur": "20 min"}, {"id": "sat-1", "day": "Saturday", "text": "Flashcards, \"unknown only\" mode until it is empty.", "href": "#cards", "dur": "20 min"}, {"id": "sat-2", "day": "Saturday", "text": "Practice bank: Quiz 3, 4 and 5, then Review mode until the pool is empty.", "href": "#bank", "dur": "90 min"}, {"id": "sat-3", "day": "Saturday", "text": "Redo every test question you missed in this app.", "href": "#tests", "dur": "20 min"}, {"id": "sat-4", "day": "Saturday", "text": "Stop studying 3 hours before the exam. Check webcam, ID, clean desk, browser for OnVUE.", "href": "#home", "dur": "15 min"}, {"id": "sat-5", "day": "Saturday", "text": "In the exam: 72 seconds per question, flag and move on, pick exactly the stated count on multi-select, no partial credit anywhere.", "href": "#traps", "dur": "90 min"}]}], "guideNav": [{"id": "1-how-the-exam-asks-questions", "name": "1. How the exam asks questions"}, {"id": "2-domain-configuration-15", "name": "2. Domain: Configuration (15%)"}, {"id": "3-domain-ingest-19", "name": "3. Domain: Ingest (19%)"}, {"id": "4-domain-govern-35-the-biggest-block", "name": "4. Domain: Govern (35%) - the biggest block"}, {"id": "5-domain-insight-20", "name": "5. Domain: Insight (20%)"}, {"id": "6-domain-csdm-fundamentals-11-officially-but-its-vocabulary-appears-across-the-other-89", "name": "6. Domain: CSDM Fundamentals (11% officially, but its vocabulary appears across the other 89%)"}]};
+const KEY = 'cisdf_companion_v1';
+let S = {plan:{}, labs:{}, known:{}, tests:{}, cardIdx:0, cardBlock:'all', cardUnknown:false, test:'diag', timers:{}};
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('on'),1600); }
+
+/* ---- routing ---- */
+const VIEWS = ['home','plan','guide','addendum','traps','cards','tests','bank','labs'];
+function route(){
+  const h = (location.hash || '#home').slice(1);
+  const [v, sub] = h.split('/');
+  const view = VIEWS.includes(v) ? v : 'home';
+  $$('.view').forEach(el => el.classList.toggle('on', el.dataset.view === view));
+  $$('#nav a').forEach(a => { if (a.dataset.v === view) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  if (view === 'tests' && sub && DATA.tests.some(t=>t.id===sub)) { S.test = sub; save(); renderTests(); }
+  if (view === 'guide' && sub) { const el = document.getElementById(sub); if (el) setTimeout(()=>el.scrollIntoView({block:'start'}), 30); else window.scrollTo(0,0); }
+  else window.scrollTo(0,0);
+  if (view === 'home') renderHome();
+  if (view === 'plan') renderPlan();
+  if (view === 'cards') renderCard();
+  if (view === 'tests') renderTests();
+  if (view === 'labs') renderLabs();
+}
+window.addEventListener('hashchange', route);
+
+/* ---- progress ---- */
+const allSteps = DATA.plan.flatMap(d => d.steps);
+function planDone(){ return allSteps.filter(s => S.plan[s.id]).length; }
+function nextStep(){ return allSteps.find(s => !S.plan[s.id]); }
+function testScore(id){
+  const t = DATA.tests.find(t=>t.id===id); const st = S.tests[id] || {};
+  let answered=0, correct=0; const dom={};
+  t.questions.forEach(q => { const d = dom[q.domain] = dom[q.domain] || {n:0,ok:0,total:0}; d.total++;
+    const a = st[q.n]; if (a && a.checked) { answered++; d.n++; if (a.correct) { correct++; d.ok++; } } });
+  return {answered, correct, total:t.questions.length, dom};
+}
+function updateTop(){
+  const pct = Math.round(planDone()/allSteps.length*100);
+  $('#ring').setAttribute('stroke-dasharray', pct + ' 100');
+  $('#prog-text').textContent = pct + '% of plan done';
+  const exam = new Date(2026, 8, 19, 20, 0, 0); const now = new Date();
+  const days = Math.ceil((exam - now) / 86400000);
+  const pill = $('#days-pill');
+  pill.textContent = days > 1 ? `Exam in ${days} days` : days === 1 ? 'Exam tomorrow' : days === 0 ? 'Exam day' : 'Exam done';
+}
+
+/* ---- home ---- */
+function renderHome(){
+  const n = nextStep(); const card = $('#next-card');
+  if (n) card.innerHTML = `<div class="eyebrow">Do this next · ${esc(n.day)}</div><h2>${esc(n.text)}</h2><div class="meta">${esc(n.dur)} · step ${allSteps.indexOf(n)+1} of ${allSteps.length}</div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn primary" href="${esc(n.href)}">Go to it</a><button class="btn" id="next-done">Mark done</button></div>`;
+  else card.innerHTML = `<div class="eyebrow">Plan complete</div><h2>Nothing left but the exam.</h2><div class="meta">Rest. Read the traps once more in the morning, then stop.</div><a class="btn" href="#traps">Traps</a>`;
+  const b = $('#next-done'); if (b) b.onclick = () => { S.plan[n.id] = true; save(); renderHome(); updateTop(); toast('Step done'); };
+  const known = Object.keys(S.known).filter(k => S.known[k]).length;
+  const d = testScore('diag'), m = testScore('mock');
+  const labs = DATA.labs.filter(l => S.labs[l.id]).length;
+  const tile = (v,l,p) => `<div class="stat"><div class="v">${v}</div><div class="l">${l}</div><div class="bar"><i style="width:${p}%"></i></div></div>`;
+  $('#stats').innerHTML =
+    tile(`${planDone()}/${allSteps.length}`, 'plan steps done', planDone()/allSteps.length*100) +
+    tile(`${known}/${DATA.cards.length}`, 'flashcards marked known', known/DATA.cards.length*100) +
+    tile(d.answered ? `${Math.round(d.correct/d.answered*100)}%` : '—', `diagnostic · ${d.answered}/${d.total} answered`, d.answered ? d.correct/d.total*100 : 0) +
+    tile(m.answered ? `${Math.round(m.correct/m.answered*100)}%` : '—', `mock A · ${m.answered}/${m.total} answered`, m.answered ? m.correct/m.total*100 : 0) +
+    tile(`${labs}/${DATA.labs.length}`, 'PDI lab steps done', labs/DATA.labs.length*100);
+}
+
+/* ---- plan ---- */
+function renderPlan(){
+  const nx = nextStep();
+  $('#plan').innerHTML = DATA.plan.map(d => {
+    const done = d.steps.filter(s => S.plan[s.id]).length;
+    return `<div class="day"><header><h2>${esc(d.day)}</h2><span class="sub">${esc(d.label)}</span><span class="cnt">${done}/${d.steps.length}</span></header>` +
+      d.steps.map(s => `<label class="step ${S.plan[s.id]?'done':''} ${nx && nx.id===s.id?'next-up':''}"><input type="checkbox" data-step="${s.id}" ${S.plan[s.id]?'checked':''}><span class="t">${esc(s.text)}<a href="${esc(s.href)}">open →</a></span><span class="dur">${esc(s.dur)}</span></label>`).join('') + `</div>`;
+  }).join('');
+  $$('#plan input').forEach(i => i.onchange = () => { S.plan[i.dataset.step] = i.checked; save(); renderPlan(); updateTop(); });
+}
+
+/* ---- guide nav ---- */
+$('#guide-nav').innerHTML = DATA.guideNav.map(g => `<a href="#guide/${g.id}">${esc(g.name.replace(/\s*\(.*$/,'').replace(/^\d+\.\s*/,'§$&').replace('§','').replace(/^(\d+)\.\s*Domain:\s*/,'$1 · '))}</a>`).join('');
+
+/* ---- flashcards ---- */
+const blocks = Array.from(new Set(DATA.cards.map(c => c.block)));
+$('#card-block').innerHTML += blocks.map(b => `<option value="${esc(b)}">${esc(b)}</option>`).join('');
+$('#card-block').value = S.cardBlock; $('#card-unknown').checked = !!S.cardUnknown;
+let order = DATA.cards.map(c => c.id); let flipped = false;
+function deck(){ return order.filter(id => { const c = DATA.cards[id]; return (S.cardBlock==='all' || c.block===S.cardBlock) && (!S.cardUnknown || !S.known[id]); }); }
+function renderCard(){
+  const d = deck(); const el = $('#card');
+  if (!d.length) { el.innerHTML = `<div class="term">Deck empty</div><div class="hint">${S.cardUnknown ? 'Every card in this block is marked known. Switch off "unknown only" or pick another block.' : 'Pick a block.'}</div>`; $('#card-n').textContent=''; return; }
+  if (S.cardIdx >= d.length) S.cardIdx = 0;
+  const c = DATA.cards[d[S.cardIdx]];
+  const knownCount = d.filter(id => S.known[id]).length;
+  el.innerHTML = `<span class="lbl">${flipped ? 'Definition' : 'Term'}</span><span class="blk">${esc(c.block.replace(/ - .*/,''))}${S.known[c.id] ? ' · known' : ''}</span>` +
+    (flipped ? `<div class="def">${c.def}</div><div class="hint">${c.term}</div>` : `<div class="term">${c.term}</div><div class="hint">Tap to reveal</div>`);
+  $('#card-n').textContent = `${S.cardIdx+1} / ${d.length} · ${knownCount} known`;
+}
+function move(n){ const d = deck(); if (!d.length) return; S.cardIdx = (S.cardIdx + n + d.length) % d.length; flipped = false; save(); renderCard(); }
+function mark(v){ const d = deck(); if (!d.length) return; const id = d[S.cardIdx]; S.known[id] = v; save();
+  if (S.cardUnknown && v) { flipped=false; if (S.cardIdx >= deck().length) S.cardIdx = 0; renderCard(); } else move(1); }
+$('#card').onclick = () => { flipped = !flipped; renderCard(); };
+$('#card').onkeydown = e => { if (e.key===' '||e.key==='Enter'){ e.preventDefault(); flipped=!flipped; renderCard(); } if (e.key==='ArrowRight') move(1); if (e.key==='ArrowLeft') move(-1); };
+$('#card-next').onclick = () => move(1); $('#card-prev').onclick = () => move(-1);
+$('#card-know').onclick = () => mark(true); $('#card-dont').onclick = () => mark(false);
+$('#card-block').onchange = e => { S.cardBlock = e.target.value; S.cardIdx = 0; flipped=false; save(); renderCard(); };
+$('#card-unknown').onchange = e => { S.cardUnknown = e.target.checked; S.cardIdx = 0; flipped=false; save(); renderCard(); };
+$('#card-shuffle').onclick = () => { for (let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; } S.cardIdx=0; flipped=false; renderCard(); toast('Shuffled'); };
+$('#card-reset').onclick = () => { if (confirm('Clear all known marks?')) { S.known = {}; S.cardIdx=0; save(); renderCard(); } };
+
+/* ---- tests ---- */
+const DOMS = ['Configuration','Ingest','Govern','Insight','CSDM'];
+let onlyMissed = false;
+function renderTests(){
+  const t = DATA.tests.find(x => x.id === S.test) || DATA.tests[0];
+  $('#test-tabs').innerHTML = DATA.tests.map(x => `<button role="tab" aria-selected="${x.id===t.id}" data-t="${x.id}">${esc(x.title)} · ${x.questions.length} q · ${x.minutes} min</button>`).join('');
+  $$('#test-tabs button').forEach(b => b.onclick = () => { S.test = b.dataset.t; onlyMissed=false; save(); history.replaceState(null,'','#tests/'+S.test); renderTests(); });
+  const sc = testScore(t.id); const st = S.tests[t.id] = S.tests[t.id] || {};
+  const pct = sc.answered ? Math.round(sc.correct/sc.answered*100) : 0;
+  const tm = S.timers[t.id]; const elapsed = tm ? Math.floor((Date.now()-tm)/60000) : null;
+  $('#test-summary').innerHTML = `<div><div class="big">${sc.answered ? pct+'%' : '—'} <small>${sc.correct}/${sc.answered} correct · ${sc.total-sc.answered} left</small></div></div>` +
+    `<div>${DOMS.filter(d=>sc.dom[d]).map(d => { const x = sc.dom[d]; const p = x.n ? Math.round(x.ok/x.n*100) : 0; return `<div class="dom"><span><i class="dc-${d.toLowerCase()}" style="display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px"></i>${d}</span><div class="bar"><i class="dc-${d.toLowerCase()}" style="width:${x.n?p:0}%"></i></div><span class="n">${x.ok}/${x.total}</span></div>`; }).join('')}</div>` +
+    `<div class="tacts"><button class="btn sm" id="t-missed">${onlyMissed ? 'Show all' : 'Show missed only'}</button><button class="btn sm ghost" id="t-reset">Reset this test</button><button class="btn sm ghost" id="t-timer">${tm ? 'Stop timer' : 'Start timer'}</button><span class="timer" id="t-elapsed">${tm ? elapsed + ' min elapsed' : 'time-box ' + t.minutes + ' min'}</span></div>`;
+  $('#t-missed').onclick = () => { onlyMissed = !onlyMissed; renderTests(); };
+  $('#t-reset').onclick = () => { if (confirm('Clear all answers for ' + t.title + '?')) { S.tests[t.id] = {}; delete S.timers[t.id]; save(); renderTests(); } };
+  $('#t-timer').onclick = () => { if (S.timers[t.id]) delete S.timers[t.id]; else S.timers[t.id] = Date.now(); save(); renderTests(); };
+  $('#test-body').innerHTML = t.questions.map(q => {
+    const a = st[q.n] || {sel:[], checked:false};
+    const hide = onlyMissed && !(a.checked && !a.correct);
+    return `<div class="q ${hide?'hidden':''}" data-q="${q.n}"><div class="qh"><span class="num">${t.id==='diag'?'D':'M'}${String(q.n).padStart(2,'0')}</span><span class="chip dc-${q.domain.toLowerCase()}">${q.domain}</span>${q.multi ? `<span class="chip multi">choose ${q.ans.length}</span>` : ''}</div><div class="qt">${q.q}</div><div class="opts">` +
+      q.opts.map(o => { let cls = a.sel.includes(o.l) ? 'sel' : ''; if (a.checked) { if (q.ans.includes(o.l)) cls = 'right'; else if (a.sel.includes(o.l)) cls = 'wrong'; }
+        return `<button class="opt ${cls}" data-l="${o.l}" ${a.checked?'disabled':''}><span class="l">${o.l}</span><span>${o.t}</span></button>`; }).join('') +
+      `</div><div class="qf">` + (a.checked ? `<span class="res ${a.correct?'ok':'ko'}">${a.correct ? 'Correct' : 'Incorrect · answer ' + q.ans.join(', ')}</span><button class="btn sm ghost" data-retry="${q.n}">Retry</button>` : `<button class="btn sm primary" data-check="${q.n}" ${a.sel.length ? '' : 'disabled'}>Check answer</button>`) + `</div>` +
+      (a.checked ? `<div class="why"><b>Why.</b> ${q.why}</div>` : '') + `</div>`;
+  }).join('');
+  $$('#test-body .opt').forEach(b => b.onclick = () => {
+    const qn = +b.closest('.q').dataset.q; const q = t.questions.find(x=>x.n===qn); const a = st[qn] = st[qn] || {sel:[], checked:false};
+    if (a.checked) return;
+    if (q.multi) { a.sel = a.sel.includes(b.dataset.l) ? a.sel.filter(x=>x!==b.dataset.l) : a.sel.concat(b.dataset.l); }
+    else a.sel = [b.dataset.l];
+    save(); patchQ(t, q);
+  });
+  bindChecks(t);
+}
+function patchQ(t, q){
+  const st = S.tests[t.id]; const a = st[q.n]; const el = $(`#test-body .q[data-q="${q.n}"]`);
+  $$('.opt', el).forEach(o => o.classList.toggle('sel', a.sel.includes(o.dataset.l)));
+  const c = $('[data-check]', el); if (c) c.disabled = !a.sel.length;
+}
+function bindChecks(t){
+  $$('#test-body [data-check]').forEach(b => b.onclick = () => {
+    const qn = +b.dataset.check; const q = t.questions.find(x=>x.n===qn); const a = S.tests[t.id][qn];
+    if (q.multi && a.sel.length !== q.ans.length) { toast(`Pick exactly ${q.ans.length}`); return; }
+    a.checked = true; a.correct = a.sel.length===q.ans.length && q.ans.every(x=>a.sel.includes(x)); save();
+    const y = window.scrollY; renderTests(); window.scrollTo(0, y);
+  });
+  $$('#test-body [data-retry]').forEach(b => b.onclick = () => { S.tests[t.id][+b.dataset.retry] = {sel:[], checked:false}; save(); const y = window.scrollY; renderTests(); window.scrollTo(0,y); });
+}
+
+/* ---- labs ---- */
+function renderLabs(){
+  const secs = Array.from(new Set(DATA.labs.map(l => l.section)));
+  $('#labs').innerHTML = secs.map(s => { const items = DATA.labs.filter(l => l.section===s); const done = items.filter(l=>S.labs[l.id]).length;
+    return `<div class="day labsec"><header><h2>${esc(s)}</h2><span class="cnt">${done}/${items.length}</span></header>` + items.map(l => `<label class="lab ${S.labs[l.id]?'done':''}"><input type="checkbox" data-lab="${l.id}" ${S.labs[l.id]?'checked':''}><span><span class="t">${l.text}</span>${l.extra ? `<div class="extra">${l.extra}</div>` : ''}</span></label>`).join('') + `</div>`; }).join('');
+  $$('#labs input').forEach(i => i.onchange = () => { S.labs[i.dataset.lab] = i.checked; save(); renderLabs(); });
+}
+
+updateTop(); route();
+</script>
