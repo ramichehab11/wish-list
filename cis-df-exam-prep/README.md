@@ -19,6 +19,7 @@ browser. The markdown files remain the readable source of the same content.
 | `05-hands-on-pdi-checklist.md` | 60-90 min of clicks in a Personal Developer Instance on the features the exam names. | Fri |
 | `06-common-traps.md` | Confusable pairs the exam loves. Read the night before. | Sat |
 | `07-practice-bank-386-questions.html` | Interactive 386-question bank (5 quizzes, review mode, drag-and-drop). Your main testing tool. | Thu-Sat |
+| `walk.html` | **Night walk mode** for the phone: reads 20-second briefings, flashcards and quiz questions aloud with a thinking pause, hands-free. Zero reading required. | Every evening |
 | `08-blueprint-addendum.md` | Official blueprint sub-topics mapped to the kit, plus the topics added after reading it and the 3 official sample questions. | Fri |
 
 ## Exam facts (from the official blueprint, KB0012913, updated November 2025)
