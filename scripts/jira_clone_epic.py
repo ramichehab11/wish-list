@@ -194,16 +194,45 @@ class Jira:
         return self.get("field")
 
     def create_meta_fields(self, project_key, issue_type_id):
-        meta = self.get("issue/createmeta", params={
-            "projectKeys": project_key,
-            "issuetypeIds": issue_type_id,
-            "expand": "projects.issuetypes.fields",
-        })
+        """Return {field_id: meta} for the create screen, or None if unknown.
+
+        Jira 8.4+ exposes a paginated endpoint per project/issue type; the
+        older ``createmeta?expand=projects.issuetypes.fields`` form was
+        removed in Jira 9, so it is only used as a fallback.
+        """
+        fields = {}
+        try:
+            start = 0
+            while True:
+                page = self.get("issue/createmeta/%s/issuetypes/%s" % (
+                    project_key, issue_type_id),
+                    params={"startAt": start, "maxResults": 200})
+                values = page.get("values", [])
+                for value in values:
+                    fields[value.get("fieldId")] = value
+                start += len(values)
+                if not values or page.get("isLast", start >= page.get("total", 0)):
+                    break
+        except JiraError as exc:
+            if exc.status not in (400, 404, 405):
+                raise
+        if fields:
+            return fields
+        try:
+            meta = self.get("issue/createmeta", params={
+                "projectKeys": project_key,
+                "issuetypeIds": issue_type_id,
+                "expand": "projects.issuetypes.fields",
+            })
+        except JiraError as exc:
+            if exc.status not in (400, 404, 405):
+                raise
+            return None
         for project in meta.get("projects", []):
             for itype in project.get("issuetypes", []):
                 if str(itype.get("id")) == str(issue_type_id):
-                    return itype.get("fields", {})
-        return {}
+                    fields = itype.get("fields") or {}
+        return fields or None
 
     def project_issue_types(self, project_key):
         return self.get("project/" + project_key).get("issueTypes", [])
@@ -332,6 +361,8 @@ def build_clone_fields(issue, target, epic_link_field, custom_types,
     """Build the create payload for a clone of ``issue`` under ``target``."""
     src = issue["fields"]
     project_key = src["project"]["key"]
+    on_screen = (lambda f: True) if create_meta is None else \
+        (lambda f: f in create_meta)
     out = {
         "project": {"key": project_key},
         "issuetype": {"id": src["issuetype"]["id"]},
@@ -339,13 +370,13 @@ def build_clone_fields(issue, target, epic_link_field, custom_types,
     }
     if src.get("description"):
         out["description"] = rewrite(src["description"], replacements)
-    if src.get("priority") and "priority" in create_meta:
+    if src.get("priority") and on_screen("priority"):
         out["priority"] = as_ref(src["priority"])
-    if src.get("labels") and "labels" in create_meta:
+    if src.get("labels") and on_screen("labels"):
         out["labels"] = list(src["labels"])
-    if src.get("components") and "components" in create_meta:
+    if src.get("components") and on_screen("components"):
         out["components"] = [as_ref(c) for c in src["components"]]
-    if src.get("fixVersions") and "fixVersions" in create_meta:
+    if src.get("fixVersions") and on_screen("fixVersions"):
         out["fixVersions"] = [as_ref(v) for v in src["fixVersions"]]
 
     # Custom fields: only those present on the create screen, non-empty,
@@ -354,7 +385,7 @@ def build_clone_fields(issue, target, epic_link_field, custom_types,
     for field_id, value in src.items():
         if not field_id.startswith("customfield_") or value in (None, [], ""):
             continue
-        if field_id in skip_fields or field_id not in create_meta:
+        if field_id in skip_fields or not on_screen(field_id):
             continue
         if field_id == epic_link_field:
             continue
@@ -568,6 +599,10 @@ def main(argv=None):
         meta_key = (fields["project"]["key"], fields["issuetype"]["id"])
         if meta_key not in meta_cache:
             meta_cache[meta_key] = jira.create_meta_fields(*meta_key)
+            if meta_cache[meta_key] is None:
+                log("Warning: no create metadata for %s/%s; copying fields "
+                    "without checking the create screen (rejected clones are "
+                    "retried with core fields only)" % meta_key)
         core, extras = build_clone_fields(
             issue, target_key, epic_link_field, custom_types,
             meta_cache[meta_key], replacements, set(args.skip_field))

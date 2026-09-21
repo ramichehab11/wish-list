@@ -50,7 +50,10 @@ The key of the target epic is printed on stdout; progress goes to stderr.
 
 Summary, description, issue type, priority, labels, components and fix
 versions, plus custom fields that are on the create screen of the issue type.
-Sprint, rank, epic and other agile bookkeeping fields are never copied. If Jira
+Sprint, rank, epic and other agile bookkeeping fields are never copied.
+The create screen is read through the paginated createmeta endpoint (Jira
+8.4+), falling back to the legacy `createmeta?expand=` form on older
+servers; if neither is available the fields are copied without that check. If Jira
 rejects a clone because of a custom field, the issue is retried with the core
 fields only and a warning is printed. Use `--skip-field customfield_NNNNN` to
 exclude a field explicitly.
