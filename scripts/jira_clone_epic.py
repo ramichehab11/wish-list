@@ -221,20 +221,76 @@ def rewrite(text, replacements):
     return text
 
 
-def find_custom_fields(all_fields):
+EPIC_LINK_TYPE = "com.pyxis.greenhopper.jira:gp-epic-link"
+EPIC_NAME_TYPE = "com.pyxis.greenhopper.jira:gp-epic-label"
+
+
+def resolve_field(all_fields, wanted, custom_type, default_names):
+    """Find a field by explicit id/name, else by custom type, else by name.
+
+    ``wanted`` is what the user passed on the command line (id such as
+    ``customfield_10014`` or a display name), or None for auto-detection.
+    Returns the field id or None.
+    """
+    if wanted:
+        for field in all_fields:
+            if field.get("id") == wanted or \
+                    field.get("name", "").lower() == wanted.lower():
+                return field["id"]
+        raise SystemExit("Field %r not found in /rest/api/2/field; run with "
+                         "--list-fields to see what Jira exposes" % wanted)
+    for field in all_fields:
+        if (field.get("schema") or {}).get("custom") == custom_type:
+            return field["id"]
+    for field in all_fields:
+        if field.get("name", "").lower() in default_names:
+            return field["id"]
+    return None
+
+
+def find_custom_fields(all_fields, epic_link=None, epic_name=None):
     """Locate Epic Link / Epic Name field ids and build id -> custom type map."""
-    epic_link = epic_name = None
     custom_types = {}
     for field in all_fields:
-        schema = field.get("schema") or {}
-        custom = schema.get("custom")
+        custom = (field.get("schema") or {}).get("custom")
         if custom:
             custom_types[field["id"]] = custom
-        if custom == "com.pyxis.greenhopper.jira:gp-epic-link":
-            epic_link = field["id"]
-        elif custom == "com.pyxis.greenhopper.jira:gp-epic-label":
-            epic_name = field["id"]
-    return epic_link, epic_name, custom_types
+    link = resolve_field(all_fields, epic_link, EPIC_LINK_TYPE,
+                         ("epic link", "epic"))
+    name = resolve_field(all_fields, epic_name, EPIC_NAME_TYPE, ("epic name",))
+    return link, name, custom_types
+
+
+def field_label(all_fields, field_id):
+    for field in all_fields:
+        if field.get("id") == field_id:
+            return "%s (%s)" % (field_id, field.get("name"))
+    return field_id
+
+
+def epic_link_jql(field_id, epic_key):
+    """JQL clause selecting issues linked to ``epic_key`` via ``field_id``."""
+    if field_id.startswith("customfield_"):
+        return "cf[%s] = %s" % (field_id[len("customfield_"):], epic_key)
+    return '"%s" = %s' % (field_id, epic_key)
+
+
+def print_fields(all_fields, needle):
+    """Print id, name and type of fields whose id/name/type contain needle."""
+    needle = (needle or "").lower()
+    rows = []
+    for field in sorted(all_fields, key=lambda f: f.get("name", "").lower()):
+        custom = (field.get("schema") or {}).get("custom") or \
+            (field.get("schema") or {}).get("type") or ""
+        text = " ".join((field.get("id", ""), field.get("name", ""), custom))
+        if needle in text.lower():
+            rows.append((field.get("id", ""), field.get("name", ""), custom))
+    if not rows:
+        print("No field matches %r" % needle)
+        return
+    width = max(len(r[0]) for r in rows)
+    for fid, name, custom in rows:
+        print("%-*s  %-30s  %s" % (width, fid, name, custom))
 
 
 def as_ref(value, keys=("id",)):
@@ -275,6 +331,8 @@ def build_clone_fields(issue, target, epic_link_field, custom_types,
             continue
         if field_id in skip_fields or field_id not in create_meta:
             continue
+        if field_id == epic_link_field:
+            continue
         if custom_types.get(field_id) in SKIPPED_CUSTOM_TYPES:
             continue
         extras[field_id] = value
@@ -291,7 +349,7 @@ def create_with_fallback(jira, core, extras, key, log):
     """Create the issue with custom fields; on a 400 retry with core only."""
     if extras:
         try:
-            return jira.create_issue(dict(core, **extras))
+            return jira.create_issue(dict(extras, **core))
         except JiraError as exc:
             if exc.status != 400:
                 raise
@@ -343,9 +401,20 @@ def parse_args(argv):
     p.add_argument("--token",
                    help="Personal Access Token (default: JIRA_TOKEN from "
                         ".env or environment). If unset you will be prompted.")
-    p.add_argument("--source-epic", required=True, metavar="KEY",
+    p.add_argument("--source-epic", metavar="KEY",
                    help="Epic whose child issues are cloned")
-    target = p.add_mutually_exclusive_group(required=True)
+    p.add_argument("--epic-link-field", metavar="ID_OR_NAME",
+                   help="Field that links issues to their epic, as an id "
+                        "(customfield_10014) or display name (\"Epic Link\"). "
+                        "Default: auto-detect by field type, then by name.")
+    p.add_argument("--epic-name-field", metavar="ID_OR_NAME",
+                   help="Field holding the epic's name when creating a new "
+                        "epic. Default: auto-detect.")
+    p.add_argument("--list-fields", nargs="?", const="epic", metavar="TEXT",
+                   help="Print the fields Jira exposes whose id, name or "
+                        "type contains TEXT (default 'epic') and exit. Use "
+                        "'' to print every field.")
+    target = p.add_mutually_exclusive_group(required=False)
     target.add_argument("--target-epic", metavar="KEY",
                         help="Existing epic to clone the issues into")
     target.add_argument("--new-epic-summary", metavar="TEXT",
@@ -371,6 +440,11 @@ def parse_args(argv):
     p.add_argument("--insecure", action="store_true",
                    help="Disable TLS certificate verification (not advised)")
     args = p.parse_args(argv)
+    if args.list_fields is None:
+        if not args.source_epic:
+            p.error("--source-epic is required")
+        if not (args.target_epic or args.new_epic_summary):
+            p.error("one of --target-epic or --new-epic-summary is required")
     loaded = load_dotenv(args.env_file)
     if loaded:
         print("Loaded credentials from %s" % loaded, file=sys.stderr)
@@ -393,12 +467,21 @@ def main(argv=None):
     me = jira.myself()
     log("Authenticated as %s (%s)" % (me.get("displayName"), me.get("name")))
 
-    epic_link_field, epic_name_field, custom_types = find_custom_fields(jira.fields())
+    all_fields = jira.fields()
+    if args.list_fields is not None:
+        print_fields(all_fields, args.list_fields)
+        return 0
+    epic_link_field, epic_name_field, custom_types = find_custom_fields(
+        all_fields, args.epic_link_field, args.epic_name_field)
     if epic_link_field:
-        jql = '"Epic Link" = %s' % args.source_epic
+        log("Epic link field: %s" % field_label(all_fields, epic_link_field))
+        jql = epic_link_jql(epic_link_field, args.source_epic)
     else:
-        log("No 'Epic Link' field found; using parent relationship")
+        log("No 'Epic Link' field found (run --list-fields to inspect, or "
+            "pass --epic-link-field); using parent relationship")
         jql = "parent = %s" % args.source_epic
+    if epic_name_field:
+        log("Epic name field: %s" % field_label(all_fields, epic_name_field))
     jql += " AND issuetype not in subTaskIssueTypes()"
     if args.jql_filter:
         jql += " AND (%s)" % args.jql_filter

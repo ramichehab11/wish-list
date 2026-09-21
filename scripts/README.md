@@ -58,11 +58,44 @@ exclude a field explicitly.
 Not copied: sub-tasks, assignee, reporter, status, comments, attachments,
 issue links and watchers. Clones are created in the source issue's project.
 
+## Epic link detection
+
+Jira Server/DC attaches issues to an epic through the "Epic Link" custom
+field. The script finds it in this order:
+
+1. `--epic-link-field` if given, matched against the field id
+   (`customfield_10014`) or the display name (`"Epic Link"`, case-insensitive).
+2. A field whose type is `com.pyxis.greenhopper.jira:gp-epic-link`.
+3. A field named "Epic Link" or "Epic".
+4. Otherwise the `parent` relationship is used.
+
+The chosen field is printed at startup. To see what your Jira exposes:
+
+```bash
+python3 scripts/jira_clone_epic.py --list-fields          # fields matching "epic"
+python3 scripts/jira_clone_epic.py --list-fields sprint   # any other text
+python3 scripts/jira_clone_epic.py --list-fields ""       # every field
+```
+
+If the field is missing from that list, the token's user cannot see it.
+Check the field's context and screen configuration in Jira, or confirm the
+id from a known child issue:
+
+```bash
+curl -s -H "Authorization: Bearer $JIRA_TOKEN" \
+  "$JIRA_BASE_URL/rest/api/2/issue/PROJ-101?fields=*all" | grep -o '"customfield_[0-9]*":"PROJ-100"'
+```
+
+Then pass it explicitly: `--epic-link-field customfield_10014`.
+
 ## Options
 
 | Option | Purpose |
 | --- | --- |
 | `--env-file PATH` | `.env` file to load (default: `./.env`, then the script's directory) |
+| `--epic-link-field ID_OR_NAME` | Field linking issues to their epic, by id or display name |
+| `--epic-name-field ID_OR_NAME` | Field holding the name of a newly created epic |
+| `--list-fields [TEXT]` | Print fields whose id, name or type contains TEXT (default `epic`) and exit |
 | `--source-epic KEY` | Epic whose child issues are cloned (required) |
 | `--target-epic KEY` | Existing epic to clone into |
 | `--new-epic-summary TEXT` | Create a new epic with this summary and clone into it |
