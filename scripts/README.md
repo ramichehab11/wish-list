@@ -9,12 +9,18 @@ epic with the standard upgrade issues and copy it for each new upgrade.
 
 ## Setup
 
+Credentials are read from a `.env` file:
+
 ```bash
-export JIRA_BASE_URL=https://jira.example.com
-export JIRA_TOKEN=<personal access token>
+cp scripts/.env.example scripts/.env
+# edit scripts/.env and set JIRA_BASE_URL and JIRA_TOKEN
 ```
 
-If `JIRA_TOKEN` is not set the script prompts for it (never echoed).
+The script looks for `.env` in the current directory first, then next to
+the script. Use `--env-file PATH` to point at another file. Variables already
+present in the environment take precedence over the file, and `.env` is
+listed in `.gitignore` so it is never committed. If `JIRA_TOKEN` is still
+unset the script prompts for it (never echoed).
 
 ## Usage
 
@@ -56,6 +62,7 @@ issue links and watchers. Clones are created in the source issue's project.
 
 | Option | Purpose |
 | --- | --- |
+| `--env-file PATH` | `.env` file to load (default: `./.env`, then the script's directory) |
 | `--source-epic KEY` | Epic whose child issues are cloned (required) |
 | `--target-epic KEY` | Existing epic to clone into |
 | `--new-epic-summary TEXT` | Create a new epic with this summary and clone into it |

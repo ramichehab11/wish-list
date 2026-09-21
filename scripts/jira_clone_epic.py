@@ -8,13 +8,16 @@ Talks to the Jira REST API v2 (``/rest/api/2``) and authenticates with a
 Personal Access Token sent as ``Authorization: Bearer <token>``. Runs on
 Python 3.8+ with the standard library only.
 
+Credentials come from a ``.env`` file (see ``.env.example``) placed next to
+this script or in the current directory, or from the environment, or from
+``--env-file PATH``. Real environment variables win over the ``.env`` file.
+
 Examples
 --------
 Clone into a brand new epic, replacing the version string in summaries and
 descriptions::
 
-    export JIRA_BASE_URL=https://jira.example.com
-    export JIRA_TOKEN=xxxxxxxx
+    cp .env.example .env   # then fill in JIRA_BASE_URL and JIRA_TOKEN
     ./jira_clone_epic.py --source-epic PROJ-100 \
         --new-epic-summary "Upgrade to Vancouver" \
         --replace "Utah=Vancouver"
@@ -58,6 +61,41 @@ SKIPPED_CUSTOM_TYPES = (
 )
 
 SEARCH_PAGE_SIZE = 100
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+def load_dotenv(path=None):
+    """Load KEY=VALUE pairs from a .env file into os.environ.
+
+    Existing environment variables are never overridden. Blank lines and
+    ``#`` comments are ignored, an optional ``export `` prefix is accepted
+    and surrounding single or double quotes are stripped. Returns the path
+    that was loaded, or None when no file was found.
+    """
+    candidates = [path] if path else [
+        os.path.join(os.getcwd(), ".env"),
+        os.path.join(SCRIPT_DIR, ".env"),
+    ]
+    for candidate in candidates:
+        if not candidate or not os.path.isfile(candidate):
+            continue
+        with open(candidate, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                if line.startswith("export "):
+                    line = line[len("export "):]
+                key, value = line.split("=", 1)
+                key, value = key.strip(), value.strip()
+                if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+                    value = value[1:-1]
+                os.environ.setdefault(key, value)
+        return candidate
+    if path:
+        raise SystemExit("--env-file not found: %s" % path)
+    return None
 
 
 class JiraError(Exception):
@@ -295,12 +333,16 @@ def parse_args(argv):
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__.split("Examples")[1] if "Examples" in __doc__ else None,
     )
-    p.add_argument("--base-url", default=os.environ.get("JIRA_BASE_URL"),
+    p.add_argument("--env-file", metavar="PATH",
+                   help="Path to a .env file with JIRA_BASE_URL and "
+                        "JIRA_TOKEN (default: ./.env, then the script's "
+                        "directory)")
+    p.add_argument("--base-url",
                    help="Jira base URL, e.g. https://jira.example.com "
-                        "(env: JIRA_BASE_URL)")
-    p.add_argument("--token", default=os.environ.get("JIRA_TOKEN"),
-                   help="Personal Access Token (env: JIRA_TOKEN). If neither "
-                        "is set you will be prompted.")
+                        "(default: JIRA_BASE_URL from .env or environment)")
+    p.add_argument("--token",
+                   help="Personal Access Token (default: JIRA_TOKEN from "
+                        ".env or environment). If unset you will be prompted.")
     p.add_argument("--source-epic", required=True, metavar="KEY",
                    help="Epic whose child issues are cloned")
     target = p.add_mutually_exclusive_group(required=True)
@@ -329,8 +371,14 @@ def parse_args(argv):
     p.add_argument("--insecure", action="store_true",
                    help="Disable TLS certificate verification (not advised)")
     args = p.parse_args(argv)
+    loaded = load_dotenv(args.env_file)
+    if loaded:
+        print("Loaded credentials from %s" % loaded, file=sys.stderr)
+    args.base_url = args.base_url or os.environ.get("JIRA_BASE_URL")
+    args.token = args.token or os.environ.get("JIRA_TOKEN")
     if not args.base_url:
-        p.error("--base-url or JIRA_BASE_URL is required")
+        p.error("JIRA_BASE_URL is required (set it in .env, the environment "
+                "or pass --base-url)")
     if not args.token:
         args.token = getpass.getpass("Jira personal access token: ")
     return args
