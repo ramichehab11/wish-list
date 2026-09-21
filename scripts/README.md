@@ -66,10 +66,14 @@ field. The script finds it in this order:
 1. `--epic-link-field` if given, matched against the field id
    (`customfield_10014`) or the display name (`"Epic Link"`, case-insensitive).
 2. A field whose type is `com.pyxis.greenhopper.jira:gp-epic-link`.
-3. A field named "Epic Link" or "Epic".
+3. A field named exactly "Epic Link", then "Parent Link", then "Epic".
 4. Otherwise the `parent` relationship is used.
 
-The chosen field is printed at startup. To see what your Jira exposes:
+The chosen field is printed at startup. If the JQL built from it matches no
+issues, the script asks the Jira Agile API (`/rest/agile/1.0/epic/KEY/issue`)
+for the epic's issues instead and reads the real epic link field off the
+first child issue, correcting its choice. So a wrong guess costs nothing as
+long as the Agile API is enabled. To see what your Jira exposes:
 
 ```bash
 python3 scripts/jira_clone_epic.py --list-fields          # fields matching "epic"

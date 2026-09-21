@@ -120,8 +120,8 @@ class Jira:
         else:
             self.ctx = ssl.create_default_context()
 
-    def request(self, method, path, params=None, body=None):
-        url = self.base_url + "/rest/api/2/" + path.lstrip("/")
+    def request(self, method, path, params=None, body=None, api="api/2"):
+        url = "%s/rest/%s/%s" % (self.base_url, api, path.lstrip("/"))
         if params:
             url += "?" + urllib.parse.urlencode(params, doseq=True)
         data = None
@@ -172,6 +172,22 @@ class Jira:
                 yield issue
             start += len(issues)
             if not issues or start >= page.get("total", 0):
+                return
+
+    def epic_issues_agile(self, epic_key, fields):
+        """Yield issues in an epic via the Jira Agile API (no JQL needed)."""
+        start = 0
+        while True:
+            page = self.request("GET", "epic/%s/issue" % epic_key, params={
+                "startAt": start,
+                "maxResults": SEARCH_PAGE_SIZE,
+                "fields": ",".join(fields),
+            }, api="agile/1.0")
+            issues = page.get("issues", [])
+            for issue in issues:
+                yield issue
+            start += len(issues)
+            if not issues or page.get("isLast", start >= page.get("total", 0)):
                 return
 
     def fields(self):
@@ -242,9 +258,10 @@ def resolve_field(all_fields, wanted, custom_type, default_names):
     for field in all_fields:
         if (field.get("schema") or {}).get("custom") == custom_type:
             return field["id"]
-    for field in all_fields:
-        if field.get("name", "").lower() in default_names:
-            return field["id"]
+    for name in default_names:  # in priority order
+        for field in all_fields:
+            if field.get("name", "").lower() == name:
+                return field["id"]
     return None
 
 
@@ -256,9 +273,17 @@ def find_custom_fields(all_fields, epic_link=None, epic_name=None):
         if custom:
             custom_types[field["id"]] = custom
     link = resolve_field(all_fields, epic_link, EPIC_LINK_TYPE,
-                         ("epic link", "epic"))
+                         ("epic link", "parent link", "epic"))
     name = resolve_field(all_fields, epic_name, EPIC_NAME_TYPE, ("epic name",))
     return link, name, custom_types
+
+
+def epic_link_from_child(child, epic_key):
+    """Return the custom field id on ``child`` whose value is ``epic_key``."""
+    for field_id, value in child.get("fields", {}).items():
+        if field_id.startswith("customfield_") and value == epic_key:
+            return field_id
+    return None
 
 
 def field_label(all_fields, field_id):
@@ -493,8 +518,29 @@ def main(argv=None):
             args.source_epic, source_epic["fields"]["issuetype"].get("name")))
 
     issues = list(jira.search_all(jql, ["*all"]))
+    if not issues:
+        log("JQL '%s' matched nothing; asking the Agile API for the epic's "
+            "issues instead" % jql)
+        try:
+            issues = [i for i in jira.epic_issues_agile(args.source_epic, ["*all"])
+                      if not (i["fields"]["issuetype"].get("subtask"))]
+        except JiraError as exc:
+            log("Agile API unavailable (HTTP %s)" % exc.status)
+            issues = []
+        if issues:
+            derived = epic_link_from_child(issues[0], args.source_epic)
+            if derived and derived != epic_link_field:
+                log("Epic link field corrected from child issue %s: %s" % (
+                    issues[0]["key"], field_label(all_fields, derived)))
+                epic_link_field = derived
+            elif not derived:
+                log("Warning: could not find a field on %s holding %s; clones "
+                    "will use %s" % (issues[0]["key"], args.source_epic,
+                                     epic_link_field or "the parent field"))
     log("Found %d issue(s) under %s" % (len(issues), args.source_epic))
     if not issues:
+        log("Nothing to clone. Run --list-fields and check the epic link "
+            "field, or pass --epic-link-field explicitly.")
         return 0
 
     # Resolve / create target epic.
